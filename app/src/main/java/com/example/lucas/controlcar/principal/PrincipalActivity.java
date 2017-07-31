@@ -1,8 +1,13 @@
-package com.example.lucas.controlcar;
+package com.example.lucas.controlcar.principal;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +18,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.lucas.controlcar.R;
+import com.example.lucas.controlcar.carro.CarroCadActivity;
+import com.example.lucas.controlcar.carro.CarroDAO;
+import com.example.lucas.controlcar.carro.CarrosListFragment;
+
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private CarroDAO carroDAO;
+    private boolean isFABOpen;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +37,13 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent it = new Intent(PrincipalActivity.this, CarroCadActivity.class);
+                startActivityForResult(it, 1);
             }
         });
 
@@ -40,6 +55,11 @@ public class PrincipalActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        carroDAO = new CarroDAO(this);
+        carroDAO.listar();
+
+        setDisplay(R.id.nav_carros);
     }
 
     @Override
@@ -61,14 +81,11 @@ public class PrincipalActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(id == R.id.action_carro){
+            Intent it = new Intent(PrincipalActivity.this, CarroCadActivity.class);
+            startActivityForResult(it, 1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -77,25 +94,34 @@ public class PrincipalActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        setDisplay(item.getItemId());
         return true;
+    }
+
+    public void setDisplay(int pos){
+        Fragment fragment;
+        Activity activity;
+
+        switch (pos){
+            case R.id.nav_carros: {
+                fragment = new CarrosListFragment();
+                abrirFragment(fragment, "Carros");
+                break;
+            }
+        }
+    }
+
+    public void abrirFragment(Fragment fragment, String title){
+        DrawerLayout drawer  = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        if(fragment != null){
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.container_body, fragment);
+            ft.commit();
+
+            getSupportActionBar().setTitle(title);
+        }
     }
 }
