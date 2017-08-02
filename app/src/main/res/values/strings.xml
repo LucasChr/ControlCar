@@ -5,7 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="nav_header">Controle de veículos</string>
-    <string name="info"></string>
+    <string name="info">Sobre.</string>
     <!-- Carro -->
     <string name="nome_carro">Nome do carro</string>
     <string name="montadora_carro">Montadora</string>
@@ -16,6 +16,18 @@
     <string name="lista_carros">Carros</string>
     <string name="cad_carro">Cadastrar Carro</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">Login</string>
+
+    <!-- Strings related to login -->
+    <string name="login_usuario">Usuário</string>
+    <string name="login_senha">Senha</string>
+    <string name="action_registrar">Criar conta</string>
+    <string name="action_entrar">Entrar</string>
+    <string name="error_invalid_email">O endereço de email é inválido</string>
+    <string name="error_invalid_password">A senha é muito pequena</string>
+    <string name="error_incorrect_password">Senha incorreta</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 </resources>
