@@ -17,7 +17,7 @@ public class BancoCarros {
 
 
     private static final String[] SCRIPT_DATABASE_CREATE = new String[]{
-            "create table carros(_id integer primary key, cr_nome text, cr_montadora text, cr_modelo text, cr_placa text, cr_ano text, cr_cor text)"};
+            "create table carros(_id integer primary key, cr_nome text, cr_montadora text, cr_modelo text, cr_placa text, cr_ano text, cr_cor text, cr_foto)"};
 
     private static SQLiteDatabase db;
 

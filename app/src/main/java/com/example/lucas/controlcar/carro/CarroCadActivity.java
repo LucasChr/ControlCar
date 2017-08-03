@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.lucas.controlcar.R;
 
@@ -28,7 +27,7 @@ public class CarroCadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carro);
+        setContentView(R.layout.activity_carro_cad);
 
         Intent it = getIntent();
         Bundle bundle = it.getExtras();
@@ -37,18 +36,18 @@ public class CarroCadActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        etNome = (EditText) findViewById(R.id.activity_carro_etNome);
-        etMontadora = (EditText) findViewById(R.id.activity_carro_etMontadora);
-        etModelo = (EditText) findViewById(R.id.activity_carro_etModelo);
-        etPlaca = (EditText) findViewById(R.id.activity_carro_etPlaca);
-        etAno = (EditText) findViewById(R.id.activity_carro_etAno);
-        etCor = (EditText) findViewById(R.id.activity_carro_etCor);
-        imgFoto = (ImageView) findViewById(R.id.activity_carro_imgCarro);
+        etNome = (EditText) findViewById(R.id.carro_cad_etNome);
+        etMontadora = (EditText) findViewById(R.id.carro_cad_etMontadora);
+        etModelo = (EditText) findViewById(R.id.carro_cad_etModelo);
+        etPlaca = (EditText) findViewById(R.id.carro_cad_etPlaca);
+        etAno = (EditText) findViewById(R.id.carro_cad_etAno);
+        etCor = (EditText) findViewById(R.id.carro_cad__etCor);
+        imgFoto = (ImageView) findViewById(R.id.carro_cad_imgCarro);
 
         carroDAO = new CarroDAO(this);
     }
 
-    public void salvarCompra(View v) {
+    public void salvarCarro(View v) {
         Carro carro = new Carro();
 
         if (etNome.getText().toString().length() < 1 || etNome.equals("")) {

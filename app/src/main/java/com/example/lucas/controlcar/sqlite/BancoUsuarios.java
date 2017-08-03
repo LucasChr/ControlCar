@@ -16,7 +16,7 @@ public class BancoUsuarios {
 
 
     private static final String[] SCRIPT_DATABASE_CREATE = new String[]{
-            "create table usuarios(_id integer primary key, u_usuario text, u_senha text, u_nome text, u_email text, u_telefone text)"};
+            "create table usuarios(_id integer primary key, u_usuario text, u_senha text, u_nome text, u_email text, u_telefone text, u_foto text)"};
 
     private static SQLiteDatabase db;
 

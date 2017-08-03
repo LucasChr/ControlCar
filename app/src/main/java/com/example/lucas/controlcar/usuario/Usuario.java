@@ -12,6 +12,7 @@ public class Usuario {
     private String nome;
     private String email;
     private Integer telefone;
+    private String foto;
 
     public static final String ID = "_id";
     public static final String USUARIO = "u_usuario";
@@ -19,9 +20,10 @@ public class Usuario {
     public static final String NOME = "u_nome";
     public static final String EMAIL = "u_email";
     public static final String TELEFONE = "u_telefone";
+    public static final String FOTO = "u_foto";
 
     public static final String TABELA = "usuarios";
-    public static final String[] COLUNAS = {ID, USUARIO, SENHA, NOME, EMAIL, TELEFONE};
+    public static final String[] COLUNAS = {ID, USUARIO, SENHA, NOME, EMAIL, TELEFONE, FOTO};
 
     public Long getId() {
         return id;
@@ -69,5 +71,13 @@ public class Usuario {
 
     public void setTelefone(Integer telefone) {
         this.telefone = telefone;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 }

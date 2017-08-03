@@ -64,11 +64,22 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
+                android:id="@+id/login_entrar"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="Logar"
+                android:text="@string/action_entrar"
+                android:textStyle="bold" />
+
+            <Button
                 android:id="@+id/login_registro"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:onClick="criarConta"
                 android:text="@string/action_registrar"
                 android:textStyle="bold" />
 

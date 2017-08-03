@@ -35,11 +35,12 @@ import java.util.List;
 
 import com.example.lucas.controlcar.R;
 import com.example.lucas.controlcar.usuario.Usuario;
+import com.example.lucas.controlcar.usuario.UsuarioCadActivity;
 import com.example.lucas.controlcar.usuario.UsuarioDAO;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText edtSenha, edtLogin;
     private UsuarioDAO usuarioDAO;
@@ -53,33 +54,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edtSenha = (EditText) findViewById(R.id.login_senha);
     }
 
-    @Override
-    public void onClick(View v){
+    public void Logar(View v) {
         login(edtLogin.getText().toString(), edtSenha.getText().toString());
     }
 
-    public void login(String login, String senha){
+    public void login(String login, String senha) {
         Usuario user = usuarioDAO.buscarUsuario(login);
 
-        if(user.getUsuario() != null && user.getUsuario() == login){
-            if(user.getSenha() != null && user.getSenha() == senha){
+        if (user.getUsuario() != null && user.getUsuario() == login) {
+            if (user.getSenha() != null && user.getSenha() == senha) {
                 Intent it = new Intent(this, PrincipalActivity.class);
                 startActivity(it);
-            }else{
+            } else {
                 edtSenha.setError("Senha incorreta!");
             }
-        }else{
+        } else {
             edtLogin.setError("Login incorreto!");
         }
     }
 
-
-    private boolean emailValido(String email) {
-        return email.contains("@");
-    }
-
-    private boolean senhaValida(String password) {
-        return password.length() > 4;
+    public void criarConta(View v) {
+        Intent it = new Intent(this, UsuarioCadActivity.class);
+        startActivity(it);
     }
 }
 
