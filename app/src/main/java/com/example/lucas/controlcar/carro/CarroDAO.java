@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.lucas.controlcar.sqlite.BancoCarros;
+import com.example.lucas.controlcar.sqlite.BancoDados;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class CarroDAO {
     SQLiteDatabase db;
 
     public CarroDAO(Context context) {
-        db = BancoCarros.getDB(context);
+        db = BancoDados.getDB(context);
     }
 
     public void salvar(Carro carro) {

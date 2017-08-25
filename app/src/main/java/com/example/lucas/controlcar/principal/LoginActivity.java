@@ -55,21 +55,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Logar(View v) {
-        login(edtLogin.getText().toString(), edtSenha.getText().toString());
-    }
-
-    public void login(String login, String senha) {
-        Usuario user = usuarioDAO.buscarUsuario(login);
-
-        if (user.getUsuario() != null && user.getUsuario() == login) {
-            if (user.getSenha() != null && user.getSenha() == senha) {
-                Intent it = new Intent(this, PrincipalActivity.class);
-                startActivity(it);
-            } else {
-                edtSenha.setError("Senha incorreta!");
-            }
+        if (edtLogin.getText().toString().isEmpty() && edtSenha.getText().toString().isEmpty()) {
+            edtLogin.setError("Preencha este campo");
+            edtSenha.setError("Preencha este campo");
         } else {
-            edtLogin.setError("Login incorreto!");
+            Usuario busca = usuarioDAO.buscarUsuario(edtLogin.getText().toString());
+
+            if (busca != null) {
+                if (busca.getUsuario() != null && busca.getUsuario().equals(edtLogin.getText().toString())) {
+                    if (busca.getSenha() != null && busca.getSenha().equals(edtSenha.getText().toString())) {
+                        Intent it = new Intent(this, PrincipalActivity.class);
+                        startActivity(it);
+                    } else {
+                        edtSenha.setError("Senha incorreta!");
+                    }
+                } else {
+                    edtLogin.setError("Login incorreto!");
+                }
+            }
         }
     }
 

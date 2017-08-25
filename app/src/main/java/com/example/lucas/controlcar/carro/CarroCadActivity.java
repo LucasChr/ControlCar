@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.example.lucas.controlcar.R;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 public class CarroCadActivity extends AppCompatActivity {
 
@@ -92,6 +93,10 @@ public class CarroCadActivity extends AppCompatActivity {
             Log.i("Veiculo", "Salvo com sucesso");
             finish();
         }
+
+    }
+
+    public void atualizar(List<Carro> carros) {
 
     }
 

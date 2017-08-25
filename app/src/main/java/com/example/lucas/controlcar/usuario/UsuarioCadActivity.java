@@ -10,6 +10,8 @@ import android.widget.EditText;
 
 import com.example.lucas.controlcar.R;
 
+import java.util.List;
+
 public class UsuarioCadActivity extends AppCompatActivity {
 
     private EditText edtUsuario, edtSenha, edtCSenha, edtNome, edtEmail, edtTelefone;
@@ -21,10 +23,10 @@ public class UsuarioCadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuario_cad);
 
-        Intent it = getIntent();
-        Bundle bundle = it.getExtras();
-        String txt = bundle.getString("txt");
-        srtLista = txt;
+//        Intent it = getIntent();
+//        Bundle bundle = it.getExtras();
+//        String txt = bundle.getString("txt");
+//        srtLista = txt;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -46,15 +48,14 @@ public class UsuarioCadActivity extends AppCompatActivity {
         } else {
             usuario.setUsuario(edtUsuario.getText().toString());
         }
-        if (edtSenha.getText().toString() != edtCSenha.getText().toString()) {
-            edtSenha.setError("As senhas não conferem");
-            edtCSenha.setError("As senhas não conferem");
-        } else {
+        if (edtSenha.getText().toString().equals(edtCSenha.getText().toString())) {
             if (edtSenha.getText().toString().length() < 1 || edtSenha.equals("")) {
                 edtSenha.setError("Você precisa inserir uma senha");
             } else {
                 usuario.setSenha(edtSenha.getText().toString());
             }
+        } else {
+            edtSenha.setError("As senhas não conferem");
         }
         if (edtNome.getText().toString().length() < 1 || edtNome.equals("")) {
             edtNome.setError("Você precisa inserir seu nome completo");
@@ -78,6 +79,10 @@ public class UsuarioCadActivity extends AppCompatActivity {
             Log.i("Usuario", "Salvo com sucesso");
             finish();
         }
+    }
+
+    public void atualizar(List<Usuario> usuarios) {
+
     }
 
     @Override
