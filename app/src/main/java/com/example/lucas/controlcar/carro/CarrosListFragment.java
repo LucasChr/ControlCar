@@ -36,9 +36,9 @@ public class CarrosListFragment extends Fragment implements AdapterView.OnItemCl
         listView.setOnItemClickListener(this);
 
         carroDAO = new CarroDAO(getActivity());
-        List<Carro> carroList = carroDAO.listar();
+        carros = carroDAO.listar();
 
-        adapter = new CarroListAdapter(getActivity(), R.layout.fragment_carro_list_item, carroList);
+        adapter = new CarroListAdapter(getActivity(), R.layout.fragment_carro_list_item, carros);
 
         listView.setAdapter(adapter);
 

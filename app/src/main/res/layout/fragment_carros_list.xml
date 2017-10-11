@@ -4,10 +4,22 @@
     android:layout_height="match_parent"
     tools:context="com.example.lucas.controlcar.carro.CarrosListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/fragment_carro_list_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/app_name" />
+        android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:src="@drawable/ic_menu_send" />
+
+    </LinearLayout>
 </FrameLayout>

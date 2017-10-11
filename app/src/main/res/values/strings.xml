@@ -33,8 +33,25 @@
     <string name="login_usuario">Usuário</string>
     <string name="login_senha">Senha</string>
     <string name="action_registrar">Criar conta</string>
-    <string name="action_entrar">Entrar</string>
+    <string name="btnLogin">Entrar</string>
     <string name="erro_email_invalido">O endereço de email é inválido</string>
     <string name="erro_senha_invalida">A senha é muito pequena</string>
     <string name="erro_senha_errada">Senha incorreta</string>
+
+    <!-- Bluetooth -->
+    <string name="aguardando_conexao">Aguardando conexão...</string>
+    <string name="conectar">Conectar</string>
+    <string name="enviar">Enviar</string>
+    <string name="config">Configurações</string>
+
+    <!-- Principal drawer -->
+    <string name="opcoes">Configurações</string>
+
+    <!-- Relatorio -->
+    <string name="data_relatorio">Data:</string>
+    <string name="kmmax_relatorio">Maior velocidade:</string>
+    <string name="mediakm_relatorio">Média registrada no dia</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

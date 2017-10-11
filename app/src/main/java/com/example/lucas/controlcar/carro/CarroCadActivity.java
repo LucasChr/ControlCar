@@ -30,12 +30,12 @@ public class CarroCadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carro_cad);
 
-        Intent it = getIntent();
-        Bundle bundle = it.getExtras();
-        String txt = bundle.getString("txt");
-        srtLista = txt;
+        // Intent it = getIntent();
+        // Bundle bundle = it.getExtras();
+        //  String txt = bundle.getString("txt");
+        //  srtLista = txt;
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         etNome = (EditText) findViewById(R.id.carro_cad_etNome);
         etMontadora = (EditText) findViewById(R.id.carro_cad_etMontadora);
@@ -93,10 +93,6 @@ public class CarroCadActivity extends AppCompatActivity {
             Log.i("Veiculo", "Salvo com sucesso");
             finish();
         }
-
-    }
-
-    public void atualizar(List<Carro> carros) {
 
     }
 
@@ -160,4 +156,5 @@ public class CarroCadActivity extends AppCompatActivity {
         etCor.setText(bundle.getString("Cor"));
         Log.i("bundle", "restore");
     }
+
 }

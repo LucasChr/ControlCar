@@ -6,4 +6,10 @@
         android:orderInCategory="100"
         android:title="@string/cad_carro"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_config"
+        android:orderInCategory="100"
+        android:title="@string/config"
+        app:showAsAction="never" />
 </menu>

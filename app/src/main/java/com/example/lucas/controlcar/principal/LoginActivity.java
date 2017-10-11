@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,37 +44,34 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText edtSenha, edtLogin;
+    private Button btnLogin;
     private UsuarioDAO usuarioDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        edtLogin = (EditText) findViewById(R.id.login_usuario);
-        edtSenha = (EditText) findViewById(R.id.login_senha);
-    }
-
-    public void Logar(View v) {
-        if (edtLogin.getText().toString().isEmpty() && edtSenha.getText().toString().isEmpty()) {
-            edtLogin.setError("Preencha este campo");
-            edtSenha.setError("Preencha este campo");
-        } else {
-            Usuario busca = usuarioDAO.buscarUsuario(edtLogin.getText().toString());
-
-            if (busca != null) {
-                if (busca.getUsuario() != null && busca.getUsuario().equals(edtLogin.getText().toString())) {
-                    if (busca.getSenha() != null && busca.getSenha().equals(edtSenha.getText().toString())) {
-                        Intent it = new Intent(this, PrincipalActivity.class);
-                        startActivity(it);
-                    } else {
-                        edtSenha.setError("Senha incorreta!");
-                    }
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edtLogin = (EditText) findViewById(R.id.edtLogin);
+                edtSenha = (EditText) findViewById(R.id.edtSenha);
+                String login = edtLogin.getText().toString();
+                String senha = edtSenha.getText().toString();
+                if (login.equals("lucas") && senha.equals("123")) {
+                    alert("Login realizado com sucesso");
+                    Intent it = new Intent(LoginActivity.this, PrincipalActivity.class);
+                    startActivity(it);
                 } else {
-                    edtLogin.setError("Login incorreto!");
+                    alert("Login ou senha incorretos!");
                 }
             }
-        }
+        });
+    }
+
+    private void alert(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
     }
 
     public void criarConta(View v) {

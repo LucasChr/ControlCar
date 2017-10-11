@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +21,7 @@ import com.example.lucas.controlcar.R;
 import com.example.lucas.controlcar.carro.CarroCadActivity;
 import com.example.lucas.controlcar.carro.CarroDAO;
 import com.example.lucas.controlcar.carro.CarrosListFragment;
+import com.example.lucas.controlcar.configuracoes.ConfiguracoesActivity;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -83,9 +83,12 @@ public class PrincipalActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_carro){
+        if (id == R.id.action_carro) {
             Intent it = new Intent(PrincipalActivity.this, CarroCadActivity.class);
             startActivityForResult(it, 1);
+        }else if (id == R.id.action_config){
+            Intent it = new Intent(PrincipalActivity.this, ConfiguracoesActivity.class);
+            startActivityForResult(it, 2);
         }
 
         return super.onOptionsItemSelected(item);
@@ -98,28 +101,33 @@ public class PrincipalActivity extends AppCompatActivity
         return true;
     }
 
-    public void setDisplay(int pos){
+    public void setDisplay(int pos) {
         Fragment fragment;
         Activity activity;
 
-        switch (pos){
+        switch (pos) {
             case R.id.nav_carros: {
                 fragment = new CarrosListFragment();
                 abrirFragment(fragment, "Carros");
                 break;
             }
+            case R.id.nav_config: {
+                Intent it = new Intent(PrincipalActivity.this, ConfiguracoesActivity.class);
+                startActivityForResult(it, 2);
+                break;
+            }
         }
     }
 
-    public void abrirFragment(Fragment fragment, String title){
-        DrawerLayout drawer  = (DrawerLayout) findViewById(R.id.drawer_layout);
+    public void abrirFragment(Fragment fragment, String title) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        if(fragment != null){
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.container_body, fragment);
-            ft.commit();
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
 
             getSupportActionBar().setTitle(title);
         }

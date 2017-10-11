@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.lucas.controlcar.sqlite.BancoDados;
+import com.example.lucas.controlcar.sqlite.BancoCarros;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class CarroDAO {
     SQLiteDatabase db;
 
     public CarroDAO(Context context) {
-        db = BancoDados.getDB(context);
+        db = BancoCarros.getDB(context);
     }
 
     public void salvar(Carro carro) {
@@ -51,10 +51,12 @@ public class CarroDAO {
     }
 
     public Carro buscar(String id) {
+
         String[] colunas = Carro.COLUNAS;
         String[] whereArgs = new String[]{id};
 
         Cursor c = db.query(Carro.TABELA, colunas, Carro.ID + " = ?", whereArgs, null, null, null);
+
         c.moveToFirst();
 
         Carro carro = new Carro();
@@ -71,6 +73,7 @@ public class CarroDAO {
     }
 
     public List<Carro> listar() {
+
         String[] colunas = Carro.COLUNAS;
         Cursor c = db.query(Carro.TABELA, colunas, null, null, null, null, null);
 
@@ -88,6 +91,7 @@ public class CarroDAO {
                 carro.setFoto(c.getString(c.getColumnIndex(Carro.FOTO)));
 
                 carrosList.add(carro);
+
                 Log.i("lista", carro.getPlaca());
             } while (c.moveToNext());
         }

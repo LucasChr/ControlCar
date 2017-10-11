@@ -4,21 +4,20 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Created by lucas on 31/07/17.
+ * Created by lucas on 05/10/17.
  */
 
-public class BancoDados {
+public class BancoRelatorios {
 
-
-    private static final String NOME_BANCO = "control";
+    private static final String NOME_BANCO = "relatorios";
     private static final int VERSAO_BANCO = 1;
 
-    private static final String[] SCRIPT_DATABASE_DELETE = new String[]{"DROP TABLE IF EXISTS carros;" +" DROP TABLE IF EXISTS usuairos"};
+    //Script
+    private static final String[] SCRIPT_DATABASE_DELETE = new String[]{"DROP TABLE IF EXISTS relatorios;"};
 
-
+    //Tabela com id sequencial usa-se _id
     private static final String[] SCRIPT_DATABASE_CREATE = new String[]{
-            "create table carros(_id integer primary key, cr_nome text, cr_montadora text, cr_modelo text, cr_placa text, cr_ano text, cr_cor text, cr_foto)" +
-            "create table usuarios(_id integer primary key, u_usuario text, u_senha text, u_nome text, u_email text, u_telefone text, u_foto text)"};
+            "create table relatorios(_id integer primary key, r_data text, r_mediakm text, r_mediarpm text, r_latitude text, r_longitude text,r_kmdia text, r_kmmax text, r_kmmin text"};
 
     private static SQLiteDatabase db;
 
