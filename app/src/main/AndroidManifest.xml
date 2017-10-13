@@ -39,10 +39,11 @@
         <activity android:name=".bluetooth.BluetoothClienteActivity" />
         <activity android:name=".bluetooth.BuscaEnderecoActivity" />
         <activity android:name=".bluetooth.BuscarDispositivosActivity" />
+        <activity android:name=".bluetooth.ListaPareadosActivity" />
         <activity
-            android:name=".bluetooth.ListaPareadosActivity"
-            android:theme="@android:style/Theme.Dialog"
-            android:label="Dispositivos Pareados" />
+            android:name=".bluetooth.ListaDispositivos"
+            android:label="Dispositivos Pareados"
+            android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".bluetooth.ReceberMensagemActivity" />
     </application>
 

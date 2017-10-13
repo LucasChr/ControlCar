@@ -10,46 +10,67 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnVerifica"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Checa Bluetooth"
-            android:onClick="Verifica"/>
+            android:onClick="Verifica"
+            android:text="Verificar e ativar Bluetooth" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnDispositivos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mostra Dev/Pareados"
-            android:onClick="Pareados"/>
+            android:onClick="Pareados"
+            android:text="Dispositivos pareados" />
+
+        <Button
+            android:id="@+id/btnConhecido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="EncontraConhecido"
+            android:text="Encontrar dispositivo pelo endereço" />
+
+        <Button
+            android:id="@+id/btnBusca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Buscar"
+            android:text="Buscar dispositivos" />
+
+        <Button
+            android:id="@+id/btnVisivel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Visivel"
+            android:text="Ficar visível" />
+
+        <Button
+            android:id="@+id/btnServer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Server"
+            android:text="Iniciar servidor - aguardar mensagem" />
+
+        <Button
+            android:id="@+id/btnCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Cliente"
+            android:text="Iniciar - cliente" />
 
         <Button
             android:id="@+id/btnConectar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pesquisa"
-            android:onClick="Conectar"/>
+            android:text="Conectar" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btnSair"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Busca por mac"
-            android:onClick="Buscar"/>
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Servidor"
-            android:onClick="Server"/>
-
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cliente"
-            android:onClick="Cliente"/>
+            android:onClick="Sair"
+            android:text="Sair" />
 
     </LinearLayout>
+
 </FrameLayout>
