@@ -25,6 +25,15 @@ public class Usuario {
     public static final String TABELA = "usuarios";
     public static final String[] COLUNAS = {ID, USUARIO, SENHA, NOME, EMAIL, TELEFONE, FOTO};
 
+    public Usuario(Long id, String usuario, String senha) {
+        this.id = id;
+        this.usuario = usuario;
+        this.senha = senha;
+    }
+
+    public Usuario() {
+    }
+
     public Long getId() {
         return id;
     }

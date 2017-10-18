@@ -39,8 +39,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="#444"
         android:text="@string/btnLogin"
         android:textColor="#fff"
-        android:background="#444"/>
+        android:onClick="Validar"/>
+
+    <Button
+        android:id="@+id/btnCadastro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="#444"
+        android:text="@string/btnRegistrar"
+        android:textColor="#fff"
+        android:onClick="Registar"/>
 
 </LinearLayout>

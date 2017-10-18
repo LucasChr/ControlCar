@@ -47,7 +47,7 @@ public class CarroListAdapter extends ArrayAdapter<Carro>{
         tvNome.setText(carro.getNome());
         tvMontadora.setText(carro.getMontadora());
         tvPlaca.setText(carro.getPlaca());
-        tvAno.setText(carro.getAno());
+        tvAno.setText(carro.getAno().toString());
 
 
         if (carro.getFoto() != null) {

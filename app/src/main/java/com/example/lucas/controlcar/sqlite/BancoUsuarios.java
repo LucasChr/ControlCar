@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class BancoUsuarios {
 
     private static final String NOME_BANCO = "usuarios";
-    private static final int VERSAO_BANCO = 1;
+    private static final int VERSAO_BANCO = 2;
 
     private static final String[] SCRIPT_DATABASE_DELETE = new String[]{"DROP TABLE IF EXISTS usuarios;"};
 

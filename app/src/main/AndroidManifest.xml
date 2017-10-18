@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +32,6 @@
         <activity android:name=".principal.PrincipalActivity" />
         <activity android:name=".usuario.UsuarioActivity" />
         <activity android:name=".usuario.UsuarioCadActivity" />
-        <activity android:name=".usuario.UsuarioListActivity" />
         <activity android:name=".relatorio.RelatorioActivity" />
         <activity android:name=".relatorio.RelatorioCadActivity" />
         <activity android:name=".configuracoes.ConfiguracoesActivity" />
@@ -45,6 +45,16 @@
             android:label="Dispositivos Pareados"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".bluetooth.ReceberMensagemActivity" />
+
+        <receiver android:name=".service.BootCompletedIntentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.TestService" />
+
+        <activity android:name=".service.NotificacaoActivity"></activity>
     </application>
 
 </manifest>

@@ -15,11 +15,10 @@ import android.widget.ImageView;
 import com.example.lucas.controlcar.R;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
 
 public class CarroCadActivity extends AppCompatActivity {
 
-    private EditText etNome, etMontadora, etModelo, etPlaca, etAno, etCor;
+    private EditText edtNome, edtMontadora, edtModelo, edtPlaca, edtAno, edtCor;
     private ImageView imgFoto;
     private String srtFoto;
     private CarroDAO carroDAO;
@@ -37,12 +36,12 @@ public class CarroCadActivity extends AppCompatActivity {
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        etNome = (EditText) findViewById(R.id.carro_cad_etNome);
-        etMontadora = (EditText) findViewById(R.id.carro_cad_etMontadora);
-        etModelo = (EditText) findViewById(R.id.carro_cad_etModelo);
-        etPlaca = (EditText) findViewById(R.id.carro_cad_etPlaca);
-        etAno = (EditText) findViewById(R.id.carro_cad_etAno);
-        etCor = (EditText) findViewById(R.id.carro_cad__etCor);
+        edtNome = (EditText) findViewById(R.id.carro_cad_etNome);
+        edtMontadora = (EditText) findViewById(R.id.carro_cad_etMontadora);
+        edtModelo = (EditText) findViewById(R.id.carro_cad_etModelo);
+        edtPlaca = (EditText) findViewById(R.id.carro_cad_etPlaca);
+        edtAno = (EditText) findViewById(R.id.carro_cad_etAno);
+        edtCor = (EditText) findViewById(R.id.carro_cad__etCor);
         imgFoto = (ImageView) findViewById(R.id.carro_cad_imgCarro);
 
         carroDAO = new CarroDAO(this);
@@ -51,35 +50,35 @@ public class CarroCadActivity extends AppCompatActivity {
     public void salvarCarro(View v) {
         Carro carro = new Carro();
 
-        if (etNome.getText().toString().length() < 1 || etNome.equals("")) {
-            etNome.setError("Você precisa inserir um nome para o carro");
+        if (edtNome.getText().toString().length() < 1 || edtNome.equals("")) {
+            edtNome.setError("Você precisa inserir um nome para o carro");
         } else {
-            carro.setNome(etNome.getText().toString());
+            carro.setNome(edtNome.getText().toString());
         }
-        if (etMontadora.getText().toString().length() < 1 || etMontadora.equals("")) {
-            etMontadora.setError("Você precisa inserir uma montadora");
+        if (edtMontadora.getText().toString().length() < 1 || edtMontadora.equals("")) {
+            edtMontadora.setError("Você precisa inserir uma montadora");
         } else {
-            carro.setMontadora(etMontadora.getText().toString());
+            carro.setMontadora(edtMontadora.getText().toString());
         }
-        if (etModelo.getText().toString().length() < 1 || etModelo.equals("")) {
-            etModelo.setError("Você precisa inserir um modelo");
+        if (edtModelo.getText().toString().length() < 1 || edtModelo.equals("")) {
+            edtModelo.setError("Você precisa inserir um modelo");
         } else {
-            carro.setModelo(etModelo.getText().toString());
+            carro.setModelo(edtModelo.getText().toString());
         }
-        if (etPlaca.getText().toString().length() < 1 || etPlaca.equals("")) {
-            etPlaca.setError("Você precisa inserir a placa do veículo");
+        if (edtPlaca.getText().toString().length() < 1 || edtPlaca.equals("")) {
+            edtPlaca.setError("Você precisa inserir a placa do veículo");
         } else {
-            carro.setPlaca(etPlaca.getText().toString());
+            carro.setPlaca(edtPlaca.getText().toString());
         }
-        if (etAno.getText().toString().length() < 1 || etAno.equals("")) {
-            etAno.setError("Você precisa inserir o ano");
+        if (edtAno.getText().toString().length() < 1 || edtAno.equals("")) {
+            edtAno.setError("Você precisa inserir o ano");
         } else {
-            carro.setAno(Integer.valueOf(etAno.getText().toString()));
+            carro.setAno(Integer.valueOf(edtAno.getText().toString()));
         }
-        if (etCor.getText().toString().length() < 1 || etCor.equals("")) {
+        if (edtCor.getText().toString().length() < 1 || edtCor.equals("")) {
             carro.setCor("");
         } else {
-            carro.setCor(etCor.getText().toString());
+            carro.setCor(edtCor.getText().toString());
         }
         if (srtFoto == null || srtFoto.equals("")) {
             carro.setFoto("");
@@ -88,7 +87,7 @@ public class CarroCadActivity extends AppCompatActivity {
         }
 
         if (carro.getNome() != null && carro.getMontadora() != null && carro.getModelo() != null && carro.getPlaca() != null &&
-                carro.getAno() != null && carro.getCor() != null && srtFoto != null) {
+                carro.getAno() != null && carro.getCor() != null) {
             carroDAO.salvar(carro);
             Log.i("Veiculo", "Salvo com sucesso");
             finish();
@@ -136,24 +135,24 @@ public class CarroCadActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("Nome", etNome.getText().toString());
-        outState.putString("Montadora", etMontadora.getText().toString());
-        outState.putString("Modelo", etModelo.getText().toString());
-        outState.putString("Placa", etPlaca.getText().toString());
-        outState.putString("Ano", etAno.getText().toString());
-        outState.putString("Cor", etCor.getText().toString());
+        outState.putString("Nome", edtNome.getText().toString());
+        outState.putString("Montadora", edtMontadora.getText().toString());
+        outState.putString("Modelo", edtModelo.getText().toString());
+        outState.putString("Placa", edtPlaca.getText().toString());
+        outState.putString("Ano", edtAno.getText().toString());
+        outState.putString("Cor", edtCor.getText().toString());
         Log.i("bundle", "save");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
         super.onRestoreInstanceState(bundle);
-        etNome.setText(bundle.getString("Nome"));
-        etMontadora.setText(bundle.getString("Montadora"));
-        etModelo.setText(bundle.getString("Modelo"));
-        etPlaca.setText(bundle.getString("Placa"));
-        etAno.setText(bundle.getString("Ano"));
-        etCor.setText(bundle.getString("Cor"));
+        edtNome.setText(bundle.getString("Nome"));
+        edtMontadora.setText(bundle.getString("Montadora"));
+        edtModelo.setText(bundle.getString("Modelo"));
+        edtPlaca.setText(bundle.getString("Placa"));
+        edtAno.setText(bundle.getString("Ano"));
+        edtCor.setText(bundle.getString("Cor"));
         Log.i("bundle", "restore");
     }
 

@@ -28,7 +28,7 @@ public class UsuarioCadActivity extends AppCompatActivity {
 //        String txt = bundle.getString("txt");
 //        srtLista = txt;
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         edtUsuario = (EditText) findViewById(R.id.activity_usuario_cad_edtUsuario);
         edtSenha = (EditText) findViewById(R.id.activity_usuario_cad_edtSenha);
@@ -87,7 +87,6 @@ public class UsuarioCadActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //return super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();

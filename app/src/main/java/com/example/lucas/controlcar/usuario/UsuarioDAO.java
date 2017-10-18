@@ -66,22 +66,43 @@ public class UsuarioDAO {
         return usuario;
     }
 
-    public Usuario buscarUsuario(String usuario) {
+    //    public Usuario buscarUsuario(String user) {
+//        String[] colunas = Usuario.COLUNAS;
+//        String[] whereArgs = new String[]{user};
+//
+//        Cursor c = db.query(Usuario.TABELA, colunas, Usuario.USUARIO + " like '%?%' ", whereArgs, null, null, null);
+//        c.moveToFirst();
+//
+//        Usuario usuario = new Usuario();
+//        usuario.setId(c.getLong(c.getColumnIndex(Usuario.ID)));
+//        usuario.setUsuario(c.getString(c.getColumnIndex(Usuario.USUARIO)));
+//        usuario.setSenha(c.getString(c.getColumnIndex(Usuario.SENHA)));
+//        usuario.setNome(c.getString(c.getColumnIndex(Usuario.NOME)));
+//        usuario.setEmail(c.getString(c.getColumnIndex(Usuario.EMAIL)));
+//        usuario.setTelefone(c.getInt(c.getColumnIndex(Usuario.TELEFONE)));
+//        usuario.setFoto(c.getString(c.getColumnIndex(Usuario.FOTO)));
+//
+//        return usuario;
+//    }
+    public Usuario montaUsuario(Cursor cursor) {
+        if (cursor.getCount() == 0) {
+            return null;
+        }
+        Long id = cursor.getLong(cursor.getColumnIndex(Usuario.ID));
+        String usuario = cursor.getString(cursor.getColumnIndex(Usuario.USUARIO));
+        String senha = cursor.getString(cursor.getColumnIndex(Usuario.SENHA));
+        return new Usuario(id, usuario, senha);
+    }
+
+    public Usuario buscarUsuario(String usuario, String senha) {
+        //String sql = "SELECT * FROM " + Usuario.TABELA + " WHERE usuario = ? AND senha = ?";
+        //String[] whereArgs = new String[]{usuario, senha};
         String[] colunas = Usuario.COLUNAS;
-        String[] whereArgs = new String[]{usuario};
-
-        Cursor c = db.query(Usuario.TABELA, colunas, Usuario.USUARIO + " = ?", whereArgs, null, null, null);
-        c.moveToFirst();
-
-        Usuario user = new Usuario();
-        user.setId(c.getLong(c.getColumnIndex(Usuario.ID)));
-        user.setUsuario(c.getString(c.getColumnIndex(Usuario.USUARIO)));
-        user.setSenha(c.getString(c.getColumnIndex(Usuario.SENHA)));
-        user.setNome(c.getString(c.getColumnIndex(Usuario.NOME)));
-        user.setEmail(c.getString(c.getColumnIndex(Usuario.EMAIL)));
-        user.setTelefone(c.getInt(c.getColumnIndex(Usuario.TELEFONE)));
-
-        return user;
+        String[] whereArgs = new String[]{usuario, senha};
+        Cursor cursor = db.query(Usuario.TABELA, colunas, Usuario.USUARIO + " = ? AND " + Usuario.SENHA + " = ?", whereArgs, null, null, null);
+        //Cursor cursor = getDatabase().rawQuery(sql, selectionArgs);
+        cursor.moveToFirst();
+        return montaUsuario(cursor);
     }
 
     public List<Usuario> listar() {

@@ -24,15 +24,15 @@
     <string name="usuario_senha">Senha</string>
     <string name="usuario_csenha">Confirme a senha</string>
     <string name="usuario_nome">Nome completo</string>
-    <string name="usuairo_email">E-mail</string>
+    <string name="usuario_email">E-mail</string>
     <string name="usuario_telefone">Telefone</string>
-    <string name="lista_usarios">Usuarios</string>
+    <string name="lista_usuarios">Usuarios</string>
     <string name="cad_usuario">Cadastrar Usuário</string>
 
     <!-- Login -->
     <string name="login_usuario">Usuário</string>
     <string name="login_senha">Senha</string>
-    <string name="action_registrar">Criar conta</string>
+    <string name="btnRegistrar">Criar conta</string>
     <string name="btnLogin">Entrar</string>
     <string name="erro_email_invalido">O endereço de email é inválido</string>
     <string name="erro_senha_invalida">A senha é muito pequena</string>

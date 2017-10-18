@@ -7,9 +7,9 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/lista_carros" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_usuarios"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="@string/lista_usuarios" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"

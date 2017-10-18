@@ -8,6 +8,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_usuario"
+        android:orderInCategory="100"
+        android:title="@string/cad_usuario"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_config"
         android:orderInCategory="100"
         android:title="@string/config"
