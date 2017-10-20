@@ -13,8 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.lucas.controlcar.R;
+import com.example.lucas.controlcar.ws.CarroIncTask;
+import com.example.lucas.controlcar.ws.CarroListTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 public class CarroCadActivity extends AppCompatActivity {
 
@@ -90,6 +93,12 @@ public class CarroCadActivity extends AppCompatActivity {
                 carro.getAno() != null && carro.getCor() != null) {
             carroDAO.salvar(carro);
             Log.i("Veiculo", "Salvo com sucesso");
+
+            //Envia para o WebService
+            CarroIncTask task = new CarroIncTask(this);
+            task.execute(carro);
+            Log.i("WS", "Enviado com sucesso");
+
             finish();
         }
 
@@ -100,6 +109,20 @@ public class CarroCadActivity extends AppCompatActivity {
         startActivityForResult(it, 0);
     }
 
+    //WS
+    public void finalizar() {
+        finish();
+
+        //Busca a lista de carros do servidor
+        CarroListTask listTask = new CarroListTask(this);
+        listTask.execute();
+    }
+
+    public void atualizar(List<Carro> carros) {
+
+    }
+    //Final WS
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -109,7 +132,6 @@ public class CarroCadActivity extends AppCompatActivity {
             Bitmap bitmap = (Bitmap) bundle.get("data");
 
             imgFoto.setImageBitmap(bitmap);
-
 
             //converte a imagem para string para enviar ao banco
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

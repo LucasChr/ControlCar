@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.lucas.controlcar.R;
+import com.example.lucas.controlcar.ws.UsuarioIncTask;
+import com.example.lucas.controlcar.ws.UsuarioListTask;
 
 import java.util.List;
 
@@ -77,13 +79,29 @@ public class UsuarioCadActivity extends AppCompatActivity {
         if (usuario.getUsuario() != null && usuario.getSenha() != null && usuario.getNome() != null && usuario.getEmail() != null && usuario.getTelefone() != null) {
             usuarioDAO.salvar(usuario);
             Log.i("Usuario", "Salvo com sucesso");
+
+            //Envia para o WebService
+            UsuarioIncTask task = new UsuarioIncTask(this);
+            task.execute(usuario);
+            Log.i("WS", "Enviado com sucesso");
+
             finish();
         }
+    }
+
+    //WS
+    public void finalizar() {
+        finish();
+
+        //Busca a lista de usuarios do servidor
+        UsuarioListTask listTask = new UsuarioListTask(this);
+        listTask.execute();
     }
 
     public void atualizar(List<Usuario> usuarios) {
 
     }
+    //Final WS
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

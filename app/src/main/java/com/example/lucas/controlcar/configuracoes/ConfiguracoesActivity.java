@@ -163,7 +163,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 }
 
                 if (btfSocket != null) {
-                    //Alguem conectou enstao encerra-se o socket server
+                    //Alguem conectou entao encerra-se o socket server
                     serverSocket.close();
                     //O socket possui a InputStream e OutputStram para ler e escrever
                     InputStream in = btfSocket.getInputStream();
