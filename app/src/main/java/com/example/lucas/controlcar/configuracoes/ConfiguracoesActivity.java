@@ -92,12 +92,33 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             }
         });
 
-        mHandler = new Handler(){
+        mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
 
-                if(msg.what == MESSAGE_READ){
+                if (msg.what == MESSAGE_READ) {
+                    //recebe dados
+                    String recebidos = (String) msg.obj;
+                    //reune os dados
+                    dadosBluetooth.append(recebidos);
 
+                    int fimInfo = dadosBluetooth.indexOf("}");
+
+                    if (fimInfo > 0) {
+                        String dadosCompletos = dadosBluetooth.substring(0, fimInfo);
+
+                        int tamInfo = dadosCompletos.length();
+                        //Chegou aqui e porque a informação veio correta
+                        if (dadosBluetooth.charAt(0) == '{') {
+                            String dadosFinal = dadosBluetooth.substring(1, tamInfo);
+                            Log.d("Recebidos", dadosFinal);
+
+                            /*if(dadosFinal.contains("dados")){
+                                tvTal.setText("INformação");
+                            }*/
+                        }
+                        dadosBluetooth.delete(0, dadosBluetooth.length());
+                    }
                 }
 
             }
@@ -204,6 +225,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
                     // Send the obtained bytes to the UI activity
                     mHandler.obtainMessage(MESSAGE_READ, bytes, -1, dadosBtf).sendToTarget();
+
                 } catch (IOException e) {
                     break;
                 }
