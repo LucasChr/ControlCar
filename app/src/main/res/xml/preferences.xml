@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory android:title="@string/titulo_config_btf">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dialogTitle="@string/config_btf_titulo"
+            android:key="enable_bluetooth_preference"
+            android:summaryOff="@string/config_btf_summaryOff"
+            android:title="@string/config_btf_titulo" />
+
+        <ListPreference
+            android:dialogTitle="@string/config_btf_list_dev_titulo"
+            android:key="bluetooth_list_preference"
+            android:summary="@string/config_btf_list_dev_summary"
+            android:title="@string/config_btf_list_dev_titulo" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/titulo_config_obd">
+
+        <ListPreference
+            android:defaultValue="@string/config_obd_protocolo_default"
+            android:dialogTitle="@string/config_obd_protocolos_titulo"
+            android:key="obd_protocols_preference"
+            android:summary="@string/config_obd_protocolos_summary"
+            android:title="@string/config_obd_protocolos_titulo" />
+
+        <EditTextPreference
+            android:defaultValue="4"
+            android:dialogTitle="@string/config_obd_temp_atualiza_titulo"
+            android:key="obd_update_period_preference"
+            android:summary="@string/config_obd_temp_atualiza_summary"
+            android:title="@string/config_obd_temp_atualiza_titulo" />
+
+        <EditTextPreference
+            android:defaultValue="45"
+            android:dialogTitle="@string/config_capacidade_tanque_titulo"
+            android:key="engine_displacement_preference"
+            android:summary="@string/config_capacidade_tanque_summary"
+            android:title="@string/config_capacidade_tanque_titulo" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

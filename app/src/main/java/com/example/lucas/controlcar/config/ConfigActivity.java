@@ -1,41 +1,51 @@
-package com.example.lucas.controlcar.configuracoes;
+package com.example.lucas.controlcar.config;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Message;
 
 import com.example.lucas.controlcar.R;
 import com.example.lucas.controlcar.bluetooth.BluetoothCheckActivity;
 import com.example.lucas.controlcar.bluetooth.BluetoothClienteActivity;
-import com.example.lucas.controlcar.bluetooth.BuscaEnderecoActivity;
 import com.example.lucas.controlcar.bluetooth.BuscarDispositivosActivity;
 import com.example.lucas.controlcar.bluetooth.ListaDispositivos;
 import com.example.lucas.controlcar.bluetooth.ListaPareadosActivity;
 import com.example.lucas.controlcar.bluetooth.ReceberMensagemActivity;
+import com.github.pires.obd.commands.engine.RPMCommand;
+import com.github.pires.obd.commands.protocol.EchoOffCommand;
+import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
+import com.github.pires.obd.commands.protocol.ObdResetCommand;
+import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
+import com.github.pires.obd.commands.protocol.TimeoutCommand;
+import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
+import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
+import com.github.pires.obd.enums.ObdProtocols;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ConfiguracoesActivity extends AppCompatActivity {
+
+public class ConfigActivity extends AppCompatActivity {
 
     private Intent intent;
 
     Button btnConectar;
 
+    TextView tvTeste;
     private static final int SOLICITA_ATIVACAO = 1;
     private static final int SOLICITA_CONEXAO = 2;
     private static final int MESSAGE_READ = 3;
@@ -61,6 +71,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_configuracoes);
 
         btnConectar = (Button) findViewById(R.id.btnConectar);
+        tvTeste = (TextView) findViewById(R.id.tvTeste);
 
         btfAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -86,7 +97,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                     }
                 } else {
                     //conectar
-                    Intent it = new Intent(ConfiguracoesActivity.this, ListaDispositivos.class);
+                    Intent it = new Intent(ConfigActivity.this, ListaDispositivos.class);
                     startActivityForResult(it, SOLICITA_CONEXAO);
                 }
             }
@@ -152,6 +163,26 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                         btnConectar.setText("Desconectar");
 
                         Toast.makeText(getApplicationContext(), "Conecado com: " + MAC, Toast.LENGTH_LONG).show();
+                        Log.d("Passou", MAC);
+                        try {
+//                            new ObdResetCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+//                            Log.d("Passou 1", "OBDRESETCOMMAND");
+//                            new EchoOffCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+//                            Log.d("Passou 2", "ECHOOFFCOMMAND");
+//                            new LineFeedOffCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+//                            Log.d("Passou 3", "LINEFEEDOFFCOMMAND");
+//                            new TimeoutCommand(125).run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+//                            Log.d("Passou 4", "TIMEOUTCOMMAND");
+//                            new SelectProtocolCommand(ObdProtocols.AUTO).run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+//                            Log.d("Passou 5", "SELECTPROTOCOLCOMMAND");
+//                            new AmbientAirTemperatureCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+//                            Log.d("Passou 6", "AMBIENTAIRTEMPERATURE");
+                            String teste = new EngineCoolantTemperatureCommand().toString();
+                            Log.d("TESTE", teste);
+                            tvTeste.setText(teste);
+                        } catch (Exception e) {
+                            // handle errors
+                        }
                     } catch (IOException e) {
                         conexao = false;
                         Toast.makeText(getApplicationContext(), "Ocorreu um erro: " + e, Toast.LENGTH_LONG).show();
@@ -211,26 +242,26 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             mmOutStream = tmpOut;
         }
 
-        public void run() {
-            byte[] buffer = new byte[1024];  // buffer store for the stream
-            int bytes; // bytes returned from read()
-
-            // Keep listening to the InputStream until an exception occurs
-            while (true) {
-                try {
-                    // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
-
-                    String dadosBtf = new String(buffer, 0, bytes);
-
-                    // Send the obtained bytes to the UI activity
-                    mHandler.obtainMessage(MESSAGE_READ, bytes, -1, dadosBtf).sendToTarget();
-
-                } catch (IOException e) {
-                    break;
-                }
-            }
-        }
+//        public void run() {
+//            byte[] buffer = new byte[1024];  // buffer store for the stream
+//            int bytes; // bytes returned from read()
+//
+//            // Keep listening to the InputStream until an exception occurs
+//            while (true) {
+//                try {
+//                    // Read from the InputStream
+//                    bytes = mmInStream.read(buffer);
+//
+//                    String dadosBtf = new String(buffer, 0, bytes);
+//
+//                    // Send the obtained bytes to the UI activity
+//                    mHandler.obtainMessage(MESSAGE_READ, bytes, -1, dadosBtf).sendToTarget();
+//
+//                } catch (IOException e) {
+//                    break;
+//                }
+//            }
+//        }
 
 //        /* Call this from the main activity to send data to the remote device */
 //        public void write(byte[] bytes) {

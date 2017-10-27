@@ -6,15 +6,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,55 +34,84 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lucas.controlcar.R;
+import com.example.lucas.controlcar.aux.Alertas;
+import com.example.lucas.controlcar.bluetooth.BluetoothAux;
 import com.example.lucas.controlcar.carro.CarroCadActivity;
 import com.example.lucas.controlcar.carro.CarroDAO;
 import com.example.lucas.controlcar.carro.CarrosListFragment;
-import com.example.lucas.controlcar.configuracoes.ConfiguracoesActivity;
-import com.example.lucas.controlcar.service.NotificacaoActivity;
-import com.example.lucas.controlcar.service.TestService;
+import com.example.lucas.controlcar.config.ConfigActivity;
+import com.example.lucas.controlcar.relatorio.RelatorioActivity;
+import com.example.lucas.controlcar.relatorio.RelatorioListFragment;
 import com.example.lucas.controlcar.usuario.UsuarioCadActivity;
 import com.example.lucas.controlcar.usuario.UsuarioListFragment;
+import com.github.pires.obd.commands.engine.RPMCommand;
+import com.github.pires.obd.commands.protocol.EchoOffCommand;
+import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
+import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
+import com.github.pires.obd.commands.protocol.TimeoutCommand;
+import com.github.pires.obd.commands.temperature.AirIntakeTemperatureCommand;
+import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
+import com.github.pires.obd.enums.ObdProtocols;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.UUID;
+
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int SOLICITA_ATIVACAO = 1;
+    private static final int MESSAGE_READ = 3;
+
+    BluetoothAdapter btfAdapter = null;
+
+    private BluetoothDevice btDevice = null;
+    private BluetoothSocket btSocket = null;
+
+    private static String MAC = "00:00:00:00:00:01";
+    private static final UUID bt_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    private boolean conexao = false;
+
+    PrincipalActivity.ConnectedThread connectedThread;
+
+    Handler mHandler;
+    StringBuilder dadosBluetooth = new StringBuilder();
+
     private CarroDAO carroDAO;
+    private TextView tvObdStatus, tvGpsStatus, tvBtfStatus;
     private boolean isFABOpen;
     FloatingActionButton fab;
-    private Notification notification;
+
+    private static String TAG = PrincipalActivity.class.getName();
+
     private NotificationCompat.Builder mBuilder;
-    private static final int SOLICITA_ATIVACAO = 1;
-    BluetoothAdapter btfAdapter = null;
-    BluetoothDevice btfDevice = null;
-    BluetoothSocket btfSocket = null;
-    UUID btf_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private static String MAC = "00:00:00:00:00:01";
-    private boolean running;
-    private boolean conexao = false;
+    private Notification notification;
+
+    Alertas alerta = new Alertas();
+    BluetoothAux bluetooth = new BluetoothAux();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        startService(new Intent(getBaseContext(), TestService.class));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tvObdStatus = (TextView) findViewById(R.id.tvOBD);
+        tvGpsStatus = (TextView) findViewById(R.id.tvGPS);
+        tvBtfStatus = (TextView) findViewById(R.id.tvBTF);
         setSupportActionBar(toolbar);
 
-        /*Float Action Button*/
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(PrincipalActivity.this, CarroCadActivity.class);
-                startActivityForResult(it, 1);
+                conectar();
             }
         });
-        /*Final Float Action Button*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -100,10 +128,10 @@ public class PrincipalActivity extends AppCompatActivity
 
         setDisplay(R.id.nav_carros);
 
-        /*Notificacao*/
         NotificationManager mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         PendingIntent p = PendingIntent.getActivity(this, 0, new Intent(this, PrincipalActivity.class), 0);
 
+        /*Notificacao ao abrir o app*/
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setTicker("Ticker Texto");
         mBuilder.setContentTitle("Executando");
@@ -111,8 +139,6 @@ public class PrincipalActivity extends AppCompatActivity
         mBuilder.setSmallIcon(R.drawable.ic_menu_manage);
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_menu_camera));
         mBuilder.setContentIntent(p);
-//        mBuilder.setProgress(0, 0, true);
-//        mNotifyManager.notify(0, mBuilder.build());
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
         String descs = new String("Control Car ainda está em execução");
@@ -120,9 +146,8 @@ public class PrincipalActivity extends AppCompatActivity
         mBuilder.setStyle(style);
 
         notification = mBuilder.build();
-        notification.flags = Notification.FLAG_NO_CLEAR;
+        notification.flags = Notification.FLAG_LOCAL_ONLY;
         mNotifyManager.notify(R.drawable.ic_menu_manage, notification);
-        /*Final Notificacao*/
 
         /*Conecao com OBD*/
         btfAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -134,53 +159,39 @@ public class PrincipalActivity extends AppCompatActivity
             startActivityForResult(it, SOLICITA_ATIVACAO);
         }
 
-        if (conexao) {
-            //desconectar
-            try {
-                btfSocket.close();
-                conexao = false;
-                exibeToast("Bluetooth desconectado");
-            } catch (IOException e) {
-                exibeToast("Ocorreu um erro: " + e);
-            }
-        } else {
-            //Conectar
-            btfDevice = btfAdapter.getRemoteDevice(MAC);
-            try {
-                btfSocket = btfDevice.createRfcommSocketToServiceRecord(btf_UUID);
-                btfSocket.connect();
-                conexao = true;
-                if (btfAdapter != null && btfAdapter.isEnabled()) {
-                    new ThreadServidor().start();
-                    running = true;
-                }
-                exibeToast("Conecado com: " + MAC);
-            } catch (IOException e) {
-                conexao = false;
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("OBD-II");
-                builder.setMessage("O scanner não está disponível verifique as configurações");
-                builder.setNegativeButton("Configurações", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        //Abre a activity de configurações
-                        Intent it = new Intent(getApplicationContext(), ConfiguracoesActivity.class);
-                        startActivityForResult(it, 1);
-                    }
-                });
-                builder.setPositiveButton("Sair", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        //Fecha a aplicação
-                        notification.flags = Notification.FLAG_AUTO_CANCEL;
-                        finishAffinity();
-                    }
-                });
-                AlertDialog alerta = builder.create();
-                alerta.show();
-            }
-        }
+//        mHandler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//
+//                if (msg.what == MESSAGE_READ) {
+//                    //recebe dados
+//                    String recebidos = (String) msg.obj;
+//                    //reune os dados
+//                    dadosBluetooth.append(recebidos);
+//
+//                    int fimInfo = dadosBluetooth.indexOf(".");
+//
+//                    if (fimInfo > 0) {
+//                        String dadosCompletos = dadosBluetooth.substring(0, fimInfo);
+//
+//                        int tamInfo = dadosCompletos.length();
+//                        //Chegou aqui e porque a informação veio correta
+//                        if (dadosBluetooth.charAt(0) == '0') {
+//                            String dadosFinal = dadosBluetooth.substring(1, tamInfo);
+//                            Log.d("Recebidos", dadosFinal);
+//                            if (dadosFinal.contains("0C")) {
+////                                tvTal.setText("INformação");
+//                                tvGpsStatus.setText(recebidos);
+//                            }
+//                        }
+//                        dadosBluetooth.delete(0, dadosBluetooth.length());
+//                    }
+//                }
+//            }
+//        };
+
     }
 
-    //Método para controlar o botão voltar do android
     @Override
     public void onBackPressed() {
         //Alerta para sair do aplicativo
@@ -190,7 +201,6 @@ public class PrincipalActivity extends AppCompatActivity
         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
                 //Fecha a aplicação
-                notification.flags = Notification.FLAG_AUTO_CANCEL;
                 finishAffinity();
             }
         });
@@ -220,11 +230,24 @@ public class PrincipalActivity extends AppCompatActivity
             Intent it = new Intent(PrincipalActivity.this, UsuarioCadActivity.class);
             startActivityForResult(it, 3);
         } else if (id == R.id.action_config) {
-            Intent it = new Intent(PrincipalActivity.this, ConfiguracoesActivity.class);
+            Intent it = new Intent(PrincipalActivity.this, ConfigActivity.class);
             startActivityForResult(it, 3);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case SOLICITA_ATIVACAO:
+                if (resultCode == Activity.RESULT_OK) {
+                    Toast.makeText(getApplicationContext(), "Bluetooth ativado!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Bluetooth não ativado neste aparelho", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -249,8 +272,13 @@ public class PrincipalActivity extends AppCompatActivity
                 abrirFragment(fragment, "Usuários");
                 break;
             }
+            case R.id.nav_relatorio: {
+                Intent it = new Intent(PrincipalActivity.this, RelatorioActivity.class);
+                startActivityForResult(it, 3);
+                break;
+            }
             case R.id.nav_config: {
-                Intent it = new Intent(PrincipalActivity.this, ConfiguracoesActivity.class);
+                Intent it = new Intent(PrincipalActivity.this, ConfigActivity.class);
                 startActivityForResult(it, 2);
                 break;
             }
@@ -271,75 +299,137 @@ public class PrincipalActivity extends AppCompatActivity
         }
     }
 
-    public void exibeToast(String mensagem) {
-        Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
-    }
-
-    //Thread para controlar a conexao e nao travar a tela
-    public class ThreadServidor extends Thread {
-        private String TAG = "Control car";
-
-        @Override
-        public void run() {
-            super.run();
+    public void conectar() {
+        if (conexao) {
+            //desconectar
             try {
-                //Abre o socket servidor (quem for conectar precisa utilizar o mesmo UUID)
-                BluetoothServerSocket serverSocket = btfAdapter.listenUsingRfcommWithServiceRecord("Bluetooth", btf_UUID);
-                //Fica aguardando alguem conectar (Chamada bloqueante)
-                try {
-                    //Aguarda conexoes
-                    btfSocket = serverSocket.accept();
-                } catch (Exception e) {
-                    //Em caso de erro encerrar aqui
-                    return;
-                }
-
-                if (btfSocket != null) {
-                    //Alguem conectou enstao encerra-se o socket server
-                    serverSocket.close();
-                    //O socket possui a InputStream e OutputStram para ler e escrever
-                    InputStream in = btfSocket.getInputStream();
-                    //Recupera o dispositivo cliente que fez a conexao
-                    btfDevice = btfSocket.getRemoteDevice();
-                    updateViewConectou(btfDevice);
-                    byte[] bytes = new byte[1024];
-                    int length;
-                    //Fica em loop para receber as mensagens
-                    while (running) {
-                        //Le a mensagem (chamada bloqueada até alguem escrever)
-                        length = in.read(bytes);
-                        String mensagemRecebida = new String(bytes, 0, length);
-                        TextView tvMsg = (TextView) findViewById(R.id.tvMsg);
-                        final String s = tvMsg.getText().toString() + mensagemRecebida + "\n";
-                        updateViewMensagem(s);
-                    }
-                }
+                btSocket.close();
+                conexao = false;
+                Toast.makeText(getApplicationContext(), "Bluetooth desconectado", Toast.LENGTH_LONG).show();
             } catch (IOException e) {
-                Log.e(TAG, "Erro no servidor: " + e.getMessage(), e);
-                running = false;
+                Toast.makeText(getApplicationContext(), "Ocorreu um erro: " + e, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            //conectar
+            tvBtfStatus.setText(R.string.btf_ativado);
+
+            btDevice = btfAdapter.getRemoteDevice(MAC);
+            try {
+                btSocket = btDevice.createRfcommSocketToServiceRecord(bt_UUID);
+                btSocket.connect();
+
+                conexao = true;
+
+                connectedThread = new ConnectedThread(btSocket);
+                connectedThread.start();
+
+                try {
+                    //new SelectProtocolCommand(ObdProtocols.AUTO).run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                    new RPMCommand().run(btSocket.getInputStream(), btSocket.getOutputStream());
+//                    int TESTE = new RPMCommand().getRPM();
+//                    new AirIntakeTemperatureCommand().getResult();
+//                    new EchoOffCommand().run(btSocket.getInputStream(), btSocket.getOutputStream());
+//                    new LineFeedOffCommand().run(btSocket.getInputStream(), btSocket.getOutputStream());
+//                    new TimeoutCommand(125).run(btSocket.getInputStream(), btSocket.getOutputStream());
+//                    new SelectProtocolCommand(ObdProtocols.AUTO).run(btSocket.getInputStream(), btSocket.getOutputStream());
+//                    new AmbientAirTemperatureCommand().run(btSocket.getInputStream(), btSocket.getOutputStream());
+//                    Log.d("Passou 5", String.valueOf(TESTE));
+//                    String teste = connectedThread.dadosBtf;
+//                    Log.d("TESTE", teste);
+//                    if (TESTE > 0) {
+//                    tvGpsStatus.setText(teste);
+//                    } else {
+//                    }
+                } catch (Exception e) {
+                    // handle errors
+                }
+                //btnConectar.setText("Desconectar");
+                Toast.makeText(getApplicationContext(), "Conecado com: " + MAC, Toast.LENGTH_LONG).show();
+                tvObdStatus.setText(R.string.obd_conectado);
+            } catch (IOException e) {
+                conexao = false;
+                AlertDialog.Builder builder = new AlertDialog.Builder(PrincipalActivity.this);
+                builder.setTitle("OBD-II");
+                builder.setMessage("O scanner não está disponível verifique as configurações");
+                builder.setNegativeButton("Configurações", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent it = new Intent(getApplicationContext(), ConfigActivity.class);
+                        startActivityForResult(it, 1);
+
+                    }
+                });
+                builder.setPositiveButton("Sair", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        //Fecha a aplicação
+                        finishAffinity();
+                    }
+                });
+                AlertDialog alerta = builder.create();
+                alerta.show();
+                tvObdStatus.setText(R.string.obd_desconectado);
             }
         }
     }
 
-    //Exibe a mensagem na tela, informando o nome do dispositivo que fez a conexao
-    private void updateViewConectou(final BluetoothDevice device) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView tvNome = (TextView) findViewById(R.id.tvNomeDispositivo);
-                tvNome.setText(device.getName() + " - " + device.getAddress());
+    private class ConnectedThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+            // Get the input and output streams, using temp objects because
+            // member streams are final
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) {
             }
-        });
+
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            byte[] buffer = new byte[1024];  // buffer store for the stream
+            int bytes; // bytes returned from read()
+
+            // Keep listening to the InputStream until an exception occurs
+            while (true) {
+                try {
+                    // Read from the InputStream
+                    bytes = mmInStream.read(buffer);
+
+                    String dadosBtf = new String(buffer, 0, bytes);
+                    Log.d("InStream", dadosBtf);
+                    // Send the obtained bytes to the UI activity
+                    mHandler.obtainMessage(MESSAGE_READ, bytes, -1, dadosBtf).sendToTarget();
+
+                } catch (IOException e) {
+                    break;
+                }
+            }
+        }
+
+        /* Call this from the main activity to send data to the remote device */
+        public void write(byte[] bytes) {
+            try {
+                mmOutStream.write(bytes);
+            } catch (IOException e) {
+            }
+        }
+
+        /* Call this from the main activity to shutdown the connection */
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
-    //Exibe a mensagem recebida na tela (Enviada pelo outro dispositivo)
-    private void updateViewMensagem(final String s) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView tvMsg = (TextView) findViewById(R.id.tvMsg);
-                tvMsg.setText(s);
-            }
-        });
-    }
+
 }

@@ -5,8 +5,33 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="nav_header">Controle de veículos</string>
-    <string name="info">Sobre.</string>
+    <string name="status_obd">Status OBD</string>
+    <string name="status_obd_parado">OBD: Inativo</string>
+    <string name="status_obd_no_support">OBD não suportado</string>
+    <string name="status_obd_data">OBD data</string>
+    <string name="status_obd_desconectado">OBD: Desconectado</string>
+    <string name="status_gps">Status GPS</string>
+    <string name="status_gps_parado">GPS: Inativo</string>
+    <string name="status_gps_ativo">GPS: Ativo</string>
+    <string name="pref_gps_category">Configurações GPS</string>
     <string name="button_salvar">Salvar</string>
+    <string name="btf_ativado">Bluetooth: Ativado</string>
+    <string name="btf_desativado">Bluetooth: Desativado</string>
+    <string name="obd_conectado">OBD: Conectado</string>
+    <string name="obd_desconectado">OBD: Desconectado</string>
+    <string name="gps_ativado">GPS: Ativado</string>
+    <string name="gps_desativado">GPS: Desativado</string>
+    <string name="status_btf_conectando">Bluetooth conectando..</string>
+    <string name="status_btf_conectado">Bluetooth conectado</string>
+    <string name="status_btf_desabilitado">Bluetooth desconectado</string>
+    <string name="status_btf_erro_conexao">Bluetooth Erro!</string>
+    <string name="status_btf">Status BTF</string>
+    <!--TESTES-->
+    <string name="text_bluetooth_semdevice">Sem dispositivo bluetooth selecionado</string>
+    <string name="notification_action">Clique para iniciar o leitor OBD</string>
+    <string name="service_starting">Iniciando conexao OBD..</string>
+    <string name="service_started">OBD conexao iniciada.</string>
+
     <!-- Carro -->
     <string name="nome_carro">Nome do carro</string>
     <string name="montadora_carro">Montadora</string>
@@ -51,9 +76,23 @@
     <string name="data_relatorio">Data:</string>
     <string name="kmmax_relatorio">Maior velocidade:</string>
     <string name="mediakm_relatorio">Média registrada no dia</string>
+    <string name="lista_relatorio">Relatórios</string>
 
     <!-- Configuracoes -->
     <string name="btn_conectar">Conectar</string>
+    <string name="titulo_config_btf">Bluetooth</string>
+    <string name="config_btf_titulo">Ativar Bluetooth</string>
+    <string name="config_btf_summaryOff">Ativa o adaptador bluetooth</string>
+    <string name="config_btf_list_dev_titulo">Dispositivos Bluetooth</string>
+    <string name="config_btf_list_dev_summary">Lista dispositivos pareados com o dispositivo</string>
+    <string name="titulo_config_obd">Configurações OBD</string>
+    <string name="config_obd_protocolos_titulo">Protocolo OBD</string>
+    <string name="config_obd_protocolos_summary">Selecione o protocolo OBD a ser utilizado</string>
+    <string name="config_obd_protocolo_default">AUTO</string>
+    <string name="config_obd_temp_atualiza_titulo">Intervalo de atualização em segundos</string>
+    <string name="config_obd_temp_atualiza_summary">Intervalo de tempo para solicitar dados ao veículo</string>
+    <string name="config_capacidade_tanque_titulo">Capacidade do tanque (em litros)</string>
+    <string name="config_capacidade_tanque_summary">Quantidade de litros que o tanque do veículo possui</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

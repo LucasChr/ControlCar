@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".configuracoes.ConfiguracoesActivity">
+    tools:context=".config.ConfigActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,6 +70,12 @@
             android:layout_height="wrap_content"
             android:onClick="Sair"
             android:text="Sair" />
+
+        <TextView
+            android:id="@+id/tvTeste"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SEMDADOS"/>
 
     </LinearLayout>
 

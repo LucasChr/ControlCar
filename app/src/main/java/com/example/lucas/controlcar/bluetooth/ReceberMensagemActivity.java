@@ -30,78 +30,78 @@ public class ReceberMensagemActivity extends BluetoothCheckActivity {
         super.onResume();
         //Se o bluetooth está ligado, vamos iniciar a Thead do servidor
         if (btfAdapter != null && btfAdapter.isEnabled()) {
-            new ThreadServidor().start();
+//            new ThreadServidor().start();
             running = true;
         }
     }
 
-    //Thread para controlar a conexao e nao travar a tela
-    public class ThreadServidor extends Thread {
-        private String TAG = "Control car";
-
-        @Override
-        public void run() {
-            super.run();
-            try {
-                //Abre o socket servidor (quem for conectar precisa utilizar o mesmo UUID)
-                BluetoothServerSocket serverSocket = btfAdapter.listenUsingRfcommWithServiceRecord("Bluetooth", uuid);
-                //Fica aguardando alguem conectar (Chamada bloqueante)
-                try {
-                    //Aguarda conexoes
-                    socket = serverSocket.accept();
-                } catch (Exception e) {
-                    //Em caso de erro encerrar aqui
-                    return;
-                }
-
-                if (socket != null) {
-                    //Alguem conectou enstao encerra-se o socket server
-                    serverSocket.close();
-                    //O socket possui a InputStream e OutputStram para ler e escrever
-                    InputStream in = socket.getInputStream();
-                    //Recupera o dispositivo cliente que fez a conexao
-                    BluetoothDevice device = socket.getRemoteDevice();
-                    updateViewConectou(device);
-                    byte[] bytes = new byte[1024];
-                    int length;
-                    //Fica em loop para receber as mensagens
-                    while (running) {
-                        //Le a mensagem (chamada bloqueada até alguem escrever)
-                        length = in.read(bytes);
-                        String mensagemRecebida = new String(bytes, 0, length);
-                        TextView tvMsg = (TextView) findViewById(R.id.tvMsg);
-                        final String s = tvMsg.getText().toString() + mensagemRecebida + "\n";
-                        updateViewMensagem(s);
-                    }
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "Erro no servidor: " + e.getMessage(), e);
-                running = false;
-            }
-        }
-    }
-
-    //Exibe a mensagem na tela, informando o nome do dispositivo que fez a conexao
-    private void updateViewConectou(final BluetoothDevice device) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView tvNome = (TextView) findViewById(R.id.tvNomeDispositivo);
-                tvNome.setText(device.getName() + " - " + device.getAddress());
-            }
-        });
-    }
-
-    //Exibe a mensagem recebida na tela (Enviada pelo outro dispositivo)
-    private void updateViewMensagem(final String s) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView tvMsg = (TextView) findViewById(R.id.tvMsg);
-                tvMsg.setText(s);
-            }
-        });
-    }
+//    //Thread para controlar a conexao e nao travar a tela
+//    public class ThreadServidor extends Thread {
+//        private String TAG = "Control car";
+//
+//        @Override
+//        public void run() {
+//            super.run();
+//            try {
+//                //Abre o socket servidor (quem for conectar precisa utilizar o mesmo UUID)
+//                BluetoothServerSocket serverSocket = btfAdapter.listenUsingRfcommWithServiceRecord("Bluetooth", uuid);
+//                //Fica aguardando alguem conectar (Chamada bloqueante)
+//                try {
+//                    //Aguarda conexoes
+//                    socket = serverSocket.accept();
+//                } catch (Exception e) {
+//                    //Em caso de erro encerrar aqui
+//                    return;
+//                }
+//
+//                if (socket != null) {
+//                    //Alguem conectou enstao encerra-se o socket server
+//                    serverSocket.close();
+//                    //O socket possui a InputStream e OutputStram para ler e escrever
+//                    InputStream in = socket.getInputStream();
+//                    //Recupera o dispositivo cliente que fez a conexao
+//                    BluetoothDevice device = socket.getRemoteDevice();
+//                    updateViewConectou(device);
+//                    byte[] bytes = new byte[1024];
+//                    int length;
+//                    //Fica em loop para receber as mensagens
+//                    while (running) {
+//                        //Le a mensagem (chamada bloqueada até alguem escrever)
+//                        length = in.read(bytes);
+//                        String mensagemRecebida = new String(bytes, 0, length);
+//                        TextView tvMsg = (TextView) findViewById(R.id.tvMsg);
+//                        final String s = tvMsg.getText().toString() + mensagemRecebida + "\n";
+//                        updateViewMensagem(s);
+//                    }
+//                }
+//            } catch (IOException e) {
+//                Log.e(TAG, "Erro no servidor: " + e.getMessage(), e);
+//                running = false;
+//            }
+//        }
+//    }
+//
+//    //Exibe a mensagem na tela, informando o nome do dispositivo que fez a conexao
+//    private void updateViewConectou(final BluetoothDevice device) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                TextView tvNome = (TextView) findViewById(R.id.tvNomeDispositivo);
+//                tvNome.setText(device.getName() + " - " + device.getAddress());
+//            }
+//        });
+//    }
+//
+//    //Exibe a mensagem recebida na tela (Enviada pelo outro dispositivo)
+//    private void updateViewMensagem(final String s) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                TextView tvMsg = (TextView) findViewById(R.id.tvMsg);
+//                tvMsg.setText(s);
+//            }
+//        });
+//    }
 
     @Override
     protected void onDestroy() {

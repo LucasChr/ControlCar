@@ -2,14 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lucas.controlcar">
 
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
 
     <application
         android:allowBackup="true"
@@ -35,7 +37,7 @@
         <activity android:name=".usuario.UsuarioCadActivity" />
         <activity android:name=".relatorio.RelatorioActivity" />
         <activity android:name=".relatorio.RelatorioCadActivity" />
-        <activity android:name=".configuracoes.ConfiguracoesActivity" />
+        <activity android:name=".config.ConfigActivity" />
         <activity android:name=".bluetooth.BluetoothCheckActivity" />
         <activity android:name=".bluetooth.BluetoothClienteActivity" />
         <activity android:name=".bluetooth.BuscaEnderecoActivity" />
@@ -47,15 +49,10 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".bluetooth.ReceberMensagemActivity" />
 
-        <receiver android:name=".service.BootCompletedIntentReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".service.TestService" />
-
-        <activity android:name=".service.NotificacaoActivity"></activity>
+        <activity android:name=".aux.Alertas" />
+        <activity
+            android:name=".bluetooth.BluetoothAux"
+            android:theme="@style/Theme.AppCompat.Light" />
     </application>
 
 </manifest>

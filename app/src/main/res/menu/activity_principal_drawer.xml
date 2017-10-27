@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/lista_usuarios" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_relatorio"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="@string/lista_relatorio" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
