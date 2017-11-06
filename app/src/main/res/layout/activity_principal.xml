@@ -33,33 +33,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvBTF"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:text="@string/status_btf" />
-
-            <TextView
-                android:id="@+id/tvOBD"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:text="@string/status_obd" />
-
-            <TextView
-                android:id="@+id/tvGPS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/status_gps" />
-        </LinearLayout>
-
     </LinearLayout>
 
     <include

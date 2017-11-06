@@ -19,8 +19,10 @@ import java.util.List;
  * Created by lucas on 31/07/17.
  */
 
-public class CarroListAdapter extends ArrayAdapter<Carro>{
+public class CarroListAdapter extends ArrayAdapter<Carro> {
 
+    private TextView tvNome, tvMontadora, tvPlaca, tvAno;
+    private ImageView imgCarro;
     private int layout;
     private Context context;
     private List<Carro> carroList;
@@ -37,11 +39,11 @@ public class CarroListAdapter extends ArrayAdapter<Carro>{
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(layout, null);
 
-        TextView tvNome = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvNome);
-        TextView tvMontadora = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvMontadora);
-        TextView tvPlaca = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvPlaca);
-        TextView tvAno = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvAno);
-        ImageView imgCarro = (ImageView) itemView.findViewById(R.id.fragment_carro_list_item_imgCarro);
+        tvNome = itemView.findViewById(R.id.fragment_carro_list_item_tvNome);
+        tvMontadora = itemView.findViewById(R.id.fragment_carro_list_item_tvMontadora);
+        tvPlaca = itemView.findViewById(R.id.fragment_carro_list_item_tvPlaca);
+        tvAno = itemView.findViewById(R.id.fragment_carro_list_item_tvAno);
+        imgCarro = itemView.findViewById(R.id.fragment_carro_list_item_imgCarro);
 
         final Carro carro = carroList.get(position);
         tvNome.setText(carro.getNome());

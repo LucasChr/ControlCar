@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:elevation="10dp"
+        app:cardCornerRadius="5dp">
+
+        <LinearLayout
+            android:id="@+id/main_line_title"
+            android:layout_width="@dimen/width_imgLista"
+            android:layout_height="@dimen/height_imgLista">
+
+            <ImageView
+                android:id="@+id/fragment_carro_recyclelist_item_imgCarro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_menu_gallery" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/paddingLeft_itensLista">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fragment_carro_recyclelist_item_tvNome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nome_carro" />
+
+                <TextView
+                    android:id="@+id/fragment_carro_recyclelist_item_tvPlaca"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:paddingRight="5dp"
+                    android:text="@string/placa_carro" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fragment_carro_recyclelist_item_tvMontadora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/montadora_carro" />
+
+                <TextView
+                    android:id="@+id/fragment_carro_recyclelist_item_tvAno"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:paddingRight="5dp"
+                    android:text="@string/ano_carro" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <!--<ImageButton-->
+    <!--android:id="@id/main_line_more"-->
+    <!--android:src="@drawable/ic_add_black_24dp" />-->
+
+    <!--<ImageButton-->
+    <!--android:id="@id/main_line_delete"-->
+    <!--android:src="@drawable/ic_delete_black_24dp" />-->
+
+</LinearLayout>

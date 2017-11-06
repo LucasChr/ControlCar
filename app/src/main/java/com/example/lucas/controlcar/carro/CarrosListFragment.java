@@ -1,8 +1,6 @@
 package com.example.lucas.controlcar.carro;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -38,7 +36,7 @@ public class CarrosListFragment extends Fragment implements AdapterView.OnItemCl
         carroDAO = new CarroDAO(getActivity());
         carros = carroDAO.listar();
 
-        adapter = new CarroListAdapter(getActivity(), R.layout.fragment_carro_list_item, carros);
+        adapter = new CarroListAdapter(getActivity(), R.layout.fragment_carros_list_item, carros);
 
         listView.setAdapter(adapter);
 

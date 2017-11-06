@@ -1,7 +1,7 @@
 /*
  * TODO put header
  */
-package com.example.lucas.controlcar.obd;
+package com.example.lucas.controlcar.config;
 
 import com.github.pires.obd.commands.ObdCommand;
 

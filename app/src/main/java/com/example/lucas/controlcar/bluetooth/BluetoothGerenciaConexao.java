@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import com.example.lucas.controlcar.obd.ObdCommandJob;
 import com.github.pires.obd.commands.ObdCommand;
 import com.github.pires.obd.commands.protocol.ObdResetCommand;
 

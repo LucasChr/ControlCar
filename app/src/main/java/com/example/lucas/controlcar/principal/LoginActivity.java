@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -50,6 +51,7 @@ public class LoginActivity extends Activity {
             boolean isValid = usuarioController.validaLogin(usuario, senha);
             if (isValid) {
                 exibeToast("Usuario e senha verificados com sucesso!");
+                Log.d("Login", "passou login");
                 Intent it = new Intent(getApplicationContext(), PrincipalActivity.class);
                 startActivityForResult(it, 1);
             } else {
