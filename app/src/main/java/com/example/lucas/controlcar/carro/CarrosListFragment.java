@@ -50,7 +50,7 @@ public class CarrosListFragment extends Fragment implements AdapterView.OnItemCl
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Carro carro = carros.get(position);
 
-        Intent it = new Intent(getActivity(), CarrosListFragment.class);
+        Intent it = new Intent(getActivity(), CarroActivity.class);
         String id1 = String.valueOf(carro.getId());
         it.putExtra(Carro.ID, id1);
         startActivityForResult(it, 1);

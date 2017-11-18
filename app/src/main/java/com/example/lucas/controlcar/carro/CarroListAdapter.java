@@ -39,11 +39,11 @@ public class CarroListAdapter extends ArrayAdapter<Carro> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(layout, null);
 
-        tvNome = itemView.findViewById(R.id.fragment_carro_list_item_tvNome);
-        tvMontadora = itemView.findViewById(R.id.fragment_carro_list_item_tvMontadora);
-        tvPlaca = itemView.findViewById(R.id.fragment_carro_list_item_tvPlaca);
-        tvAno = itemView.findViewById(R.id.fragment_carro_list_item_tvAno);
-        imgCarro = itemView.findViewById(R.id.fragment_carro_list_item_imgCarro);
+        tvNome = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvNome);
+        tvMontadora = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvMontadora);
+        tvPlaca = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvPlaca);
+        tvAno = (TextView) itemView.findViewById(R.id.fragment_carro_list_item_tvAno);
+        imgCarro = (ImageView) itemView.findViewById(R.id.fragment_carro_list_item_imgCarro);
 
         final Carro carro = carroList.get(position);
         tvNome.setText(carro.getNome());

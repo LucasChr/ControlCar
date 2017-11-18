@@ -3,8 +3,10 @@ package com.example.lucas.controlcar.carro;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,12 +29,19 @@ public class CarroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carro);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setHomeButtonEnabled(true);
+//        } else {
+//            getActionBar().setDisplayHomeAsUpEnabled(true);
+//            getActionBar().setHomeButtonEnabled(true);
+//        }
 
         carroDAO = new CarroDAO(this);
         Intent it = getIntent();
 
-        if(it != null){
+        if (it != null) {
             carro = new Carro();
             carro = carroDAO.buscar(it.getStringExtra(Carro.ID));
         }
@@ -46,20 +55,20 @@ public class CarroActivity extends AppCompatActivity {
         imgCarro = (ImageView) findViewById(R.id.activity_carro_imgCarro);
 
         byte[] bytearray = Base64.decode(carro.getFoto(), Base64.DEFAULT);
-        ivFoto = BitmapFactory.decodeByteArray(bytearray, 0,bytearray.length);
+        ivFoto = BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
         imgCarro.setImageBitmap(ivFoto);
 
         etNome.setText(carro.getNome());
         etMontadora.setText(carro.getMontadora());
         etModelo.setText(carro.getModelo());
         etPlaca.setText(carro.getPlaca());
-        etAno.setText(carro.getAno());
+        etAno.setText(String.valueOf(carro.getAno()));
         etCor.setText(carro.getCor());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;

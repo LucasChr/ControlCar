@@ -27,8 +27,8 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         context = this;
         usuarioController = UsuarioController.getInstance(context);
-        edtUsuario = findViewById(R.id.edtLogin);
-        edtSenha = findViewById(R.id.edtSenha);
+        edtUsuario = (EditText) findViewById(R.id.edtLogin);
+        edtSenha = (EditText) findViewById(R.id.edtSenha);
         try {
             testaInicializacao();
         } catch (Exception e) {

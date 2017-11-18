@@ -1,157 +1,119 @@
 package com.example.lucas.controlcar.relatorio;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TableLayout;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lucas.controlcar.R;
-import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
+import com.example.lucas.controlcar.config.ConexaoObd;
+import com.example.lucas.controlcar.config.DadosVeiculo;
+import com.example.lucas.controlcar.config.IObdConexao;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.UUID;
+public class RelatorioActivity extends AppCompatActivity {
+    private static final String TAG = "Relatorio Activity";
 
-public class RelatorioActivity extends Activity {
+    private Handler m_Handler;
+    private WakeLock m_WakeLock;
 
-    TextView tvRPM;
+    private IObdConexao m_Obd;
+    public DadosVeiculo m_ObdData;
 
-    private static final int SOLICITA_ATIVACAO = 1;
-    private static final int SOLICITA_CONEXAO = 2;
-    private static final int MESSAGE_READ = 3;
-    private static final String TAG = RelatorioActivity.class.getName();
-    private static final int NO_BLUETOOTH_ID = 0;
-    private static final int BLUETOOTH_DISABLED = 1;
-    private static final int START_LIVE_DATA = 2;
-    private static final int STOP_LIVE_DATA = 3;
-    private static final int SETTINGS = 4;
-    private static final int GET_DTC = 5;
-    private static final int TABLE_ROW_MARGIN = 7;
-    private static final int NO_ORIENTATION_SENSOR = 8;
-    private static final int NO_GPS_SUPPORT = 9;
-    private static final int TRIPS_LIST = 10;
-    private static final int SAVE_TRIP_NOT_AVAILABLE = 11;
-    private static final int REQUEST_ENABLE_BT = 1234;
+    private TextView tvFlow, tvRpm, tvSpeed;
 
-    ConnectedThread connectedThread;
-
-    Handler mHandler;
-    StringBuilder dadosBluetooth = new StringBuilder();
-
-    BluetoothAdapter btfAdapter = null;
-    BluetoothDevice btfDevice = null;
-    BluetoothSocket btfSocket = null;
-
-    boolean conexao = false;
-
-    private static String MAC = "00:00:00:00:00:01";
-
-    UUID btf_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-    private TableLayout tl;
-    private boolean isServiceBound;
-    private boolean preRequisites = true;
-    /// the trip log
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        m_WakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+                | PowerManager.ACQUIRE_CAUSES_WAKEUP
+                | PowerManager.ON_AFTER_RELEASE, "My Tag");
+
         setContentView(R.layout.activity_relatorio);
 
-        tl = (TableLayout) findViewById(R.id.activity_relatorio_data_table);
+        tvFlow = (TextView) findViewById(R.id.tvFlow);
+        tvRpm = (TextView) findViewById(R.id.tvRpm);
+        tvSpeed = (TextView) findViewById(R.id.tvSpeed);
+
+        m_Obd = new ConexaoObd();
+        m_ObdData = new DadosVeiculo();
+
+        m_Handler = new Handler();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case SOLICITA_ATIVACAO:
-                if (resultCode == Activity.RESULT_OK) {
-                    Toast.makeText(getApplicationContext(), "Bluetooth ativado!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Bluetooth não ativado neste aparelho", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case SOLICITA_CONEXAO:
-                if (resultCode == Activity.RESULT_OK) {
-                    //MAC = data.getExtras().getString(ListaDispositivos.ENDERECO_MAC);
-                    btfDevice = btfAdapter.getRemoteDevice(MAC);
-                    try {
-                        btfSocket = btfDevice.createRfcommSocketToServiceRecord(btf_UUID);
-                        btfSocket.connect();
+    public void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
 
-                        conexao = true;
+        try {
+            m_Obd.iniciaConexaoObd();
+            Toast.makeText(getApplicationContext(), "Conectado",
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Log.e(TAG, "Sem conexao: " + e.getMessage());
+            Toast.makeText(getApplicationContext(), e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            m_Obd.pararConexaoObd();
 
-                        connectedThread = new ConnectedThread(btfSocket);
-                        connectedThread.start();
-
-                        try {
-                            String teste = new EngineCoolantTemperatureCommand().toString();
-                            Log.d("TESTE", teste);
-                            tvRPM.setText(teste);
-                        } catch (Exception e) {
-                            // handle errors
-                        }
-                        //btnConectar.setText("Desconectar");
-
-                        Toast.makeText(getApplicationContext(), "Conecado com: " + MAC, Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        conexao = false;
-                        Toast.makeText(getApplicationContext(), "Ocorreu um erro: " + e, Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Falha ao obter MAC!", Toast.LENGTH_LONG).show();
-                }
+            // fall back to simulation
+//            m_Obd = new ObdConnectionSim();
         }
     }
 
-    private class ConnectedThread extends Thread {
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
 
-        public ConnectedThread(BluetoothSocket socket) {
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
+        m_WakeLock.acquire();
 
-            // Get the input and ouput streams, using temp objects because
-            // member streams are final
-            try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) {
-            }
+        m_Updater.run();
+    }
 
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-        }
-
+    Runnable m_Updater = new Runnable() {
+        @Override
         public void run() {
-            byte[] buffer = new byte[1024];  // buffer store for the stream
-            int bytes; // bytes returned from read()
+            m_Obd.atualizaDados(m_ObdData);
+            m_ObdData.calculo();
 
-            // Keep listening to the InputStream until an exception occurs
-            while (true) {
-                try {
-                    // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
+            tvRpm.setText(String.valueOf(m_ObdData.m_RpmMotor));
+            tvSpeed.setText(String.valueOf(m_ObdData.m_VelocidadeVeiculo));
 
-                    String dadosBtf = new String(buffer, 0, bytes);
-
-                    // Send the obtained bytes to the UI activity
-                    mHandler.obtainMessage(MESSAGE_READ, bytes, -1, dadosBtf).sendToTarget();
-
-                } catch (IOException e) {
-                    break;
-                }
-            }
+            // Do it all again in 100 ms
+            m_Handler.postDelayed(m_Updater, 100);
         }
+    };
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+
+        m_Handler.removeCallbacks(m_Updater);
+        m_WakeLock.release();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+
+        m_Obd.pararConexaoObd();
     }
 
 }

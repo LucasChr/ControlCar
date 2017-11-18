@@ -11,7 +11,9 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Message;
@@ -23,6 +25,8 @@ import com.example.lucas.controlcar.bluetooth.BuscarDispositivosActivity;
 import com.example.lucas.controlcar.bluetooth.ListaDispositivos;
 import com.example.lucas.controlcar.bluetooth.ListaPareadosActivity;
 import com.example.lucas.controlcar.bluetooth.ReceberMensagemActivity;
+import com.github.pires.obd.commands.SpeedCommand;
+import com.github.pires.obd.commands.control.ModuleVoltageCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
@@ -36,6 +40,7 @@ import com.github.pires.obd.enums.ObdProtocols;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -51,7 +56,8 @@ public class ConfigActivity extends AppCompatActivity {
     private static final int MESSAGE_READ = 3;
 
     ConnectedThread connectedThread;
-
+    ArrayAdapter adapter;
+    ListView lista;
     Handler mHandler;
     StringBuilder dadosBluetooth = new StringBuilder();
 
@@ -72,6 +78,7 @@ public class ConfigActivity extends AppCompatActivity {
 
         btnConectar = (Button) findViewById(R.id.btnConectar);
         tvTeste = (TextView) findViewById(R.id.tvTeste);
+        lista = (ListView) findViewById(R.id.lista);
 
         btfAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -165,21 +172,34 @@ public class ConfigActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Conecado com: " + MAC, Toast.LENGTH_LONG).show();
                         Log.d("Passou", MAC);
                         try {
-//                            new ObdResetCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
-//                            Log.d("Passou 1", "OBDRESETCOMMAND");
-//                            new EchoOffCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
-//                            Log.d("Passou 2", "ECHOOFFCOMMAND");
-//                            new LineFeedOffCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
-//                            Log.d("Passou 3", "LINEFEEDOFFCOMMAND");
-//                            new TimeoutCommand(125).run(btfSocket.getInputStream(), btfSocket.getOutputStream());
-//                            Log.d("Passou 4", "TIMEOUTCOMMAND");
-//                            new SelectProtocolCommand(ObdProtocols.AUTO).run(btfSocket.getInputStream(), btfSocket.getOutputStream());
-//                            Log.d("Passou 5", "SELECTPROTOCOLCOMMAND");
+                            new ObdResetCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                            Log.d("Passou 1", "OBDRESETCOMMAND");
+                            new EchoOffCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                            Log.d("Passou 2", "ECHOOFFCOMMAND");
+                            new LineFeedOffCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                            Log.d("Passou 3", "LINEFEEDOFFCOMMAND");
+                            new TimeoutCommand(125).run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                            Log.d("Passou 4", "TIMEOUTCOMMAND");
+                            new SelectProtocolCommand(ObdProtocols.AUTO).run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                            Log.d("Passou 5", "SELECTPROTOCOLCOMMAND");
 //                            new AmbientAirTemperatureCommand().run(btfSocket.getInputStream(), btfSocket.getOutputStream());
 //                            Log.d("Passou 6", "AMBIENTAIRTEMPERATURE");
-                            String teste = new EngineCoolantTemperatureCommand().toString();
-                            Log.d("TESTE", teste);
-                            tvTeste.setText(teste);
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            RPMCommand engineRpmCommand = new RPMCommand();
+                            SpeedCommand speedCommand = new SpeedCommand();
+                            while (!Thread.currentThread().isInterrupted()) {
+                                engineRpmCommand.run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                                speedCommand.run(btfSocket.getInputStream(), btfSocket.getOutputStream());
+                                Log.d("Passou 6", "RPM: " + engineRpmCommand.getFormattedResult());
+                                Log.d("Passou 7", "Speed: " + speedCommand.getFormattedResult());
+                                tvTeste.setText(engineRpmCommand.getFormattedResult());
+                                lista.addView(tvTeste);
+                                adapter.notifyDataSetChanged();
+                            }
                         } catch (Exception e) {
                             // handle errors
                         }
@@ -191,6 +211,19 @@ public class ConfigActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Falha ao obter MAC!", Toast.LENGTH_LONG).show();
                 }
         }
+    }
+
+    private String getVoltagem(BluetoothSocket socket) throws IOException, InterruptedException {
+        ModuleVoltageCommand voltCommand = new ModuleVoltageCommand();
+        while (!Thread.currentThread().isInterrupted()) {
+            voltCommand.run(socket.getInputStream(), socket.getOutputStream());
+            return voltCommand.getFormattedResult();
+        }
+        return "";
+    }
+
+    public void teste(View v) throws IOException, InterruptedException {
+
     }
 
     public void Verifica(View v) {
@@ -253,9 +286,9 @@ public class ConfigActivity extends AppCompatActivity {
 //                    bytes = mmInStream.read(buffer);
 //
 //                    String dadosBtf = new String(buffer, 0, bytes);
-//
+//                    Log.d("InStream", dadosBtf);
 //                    // Send the obtained bytes to the UI activity
-//                    mHandler.obtainMessage(MESSAGE_READ, bytes, -1, dadosBtf).sendToTarget();
+////                    mHandler.obtainMessage(MESSAGE_READ, bytes, -1, dadosBtf).sendToTarget();
 //
 //                } catch (IOException e) {
 //                    break;

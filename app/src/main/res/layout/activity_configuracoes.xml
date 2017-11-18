@@ -77,6 +77,29 @@
             android:layout_height="wrap_content"
             android:text="SEMDADOS"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRPM"
+            android:text="Volt"
+            android:onClick="teste"/>
+
+        <ScrollView
+            android:id="@+id/relatorio_data_scroll"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="top"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:elevation="2dp"
+            android:outlineProvider="bounds">
+
+            <ListView
+                android:id="@+id/lista"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+
     </LinearLayout>
 
 </FrameLayout>
