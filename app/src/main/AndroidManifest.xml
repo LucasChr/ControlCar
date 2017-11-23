@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -45,10 +46,24 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".bluetooth.ReceberMensagemActivity" />
 
-        <activity android:name=".aux.Alertas" />
-        <activity
-            android:name=".bluetooth.BluetoothAux"
-            android:theme="@style/Theme.AppCompat.Light" />
+        <receiver
+            android:name=".config.Broadcast"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".config.Servico"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="SERVICO_TESTE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.openxc.VehicleManager"/>
     </application>
 
 </manifest>

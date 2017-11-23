@@ -14,16 +14,12 @@
             android:id="@+id/nav_relatorio"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/lista_relatorio" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
     </group>
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_config"
             android:icon="@drawable/ic_settings_48pt"
-            android:title="@string/opcoes"/>
+            android:title="@string/opcoes" />
     </group>
 </menu>

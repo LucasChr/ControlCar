@@ -1,4 +1,4 @@
-package com.example.lucas.controlcar.config;
+package com.example.lucas.controlcar.obd;
 
 import com.github.pires.obd.commands.ObdCommand;
 import com.github.pires.obd.commands.SpeedCommand;
@@ -36,9 +36,9 @@ import java.util.ArrayList;
  * Created by lucas on 23/10/17.
  */
 
-public class ConfigObd {
+public class ComandosObd {
 
-    public static ArrayList<ObdCommand> getCommands(){
+    public static ArrayList<ObdCommand> getComandos(){
         ArrayList<ObdCommand> comandos = new ArrayList<>();
 
         //Controles
@@ -49,14 +49,12 @@ public class ConfigObd {
         comandos.add(new TimingAdvanceCommand());
         comandos.add(new TroubleCodesCommand());
         comandos.add(new VinCommand());
-
         // Motor
         comandos.add(new LoadCommand());
         comandos.add(new RPMCommand());
         comandos.add(new RuntimeCommand());
         comandos.add(new MassAirFlowCommand());
         comandos.add(new ThrottlePositionCommand());
-
         // Combustivel
         comandos.add(new FindFuelTypeCommand());
         comandos.add(new ConsumptionRateCommand());
@@ -68,21 +66,17 @@ public class ConfigObd {
         comandos.add(new AirFuelRatioCommand());
         comandos.add(new WidebandAirFuelRatioCommand());
         comandos.add(new OilTempCommand());
-
         // Pressão
         comandos.add(new BarometricPressureCommand());
         comandos.add(new FuelPressureCommand());
         comandos.add(new FuelRailPressureCommand());
         comandos.add(new IntakeManifoldPressureCommand());
-
         // Temperatura
         comandos.add(new AirIntakeTemperatureCommand());
         comandos.add(new AmbientAirTemperatureCommand());
         comandos.add(new EngineCoolantTemperatureCommand());
-
-        // Misc
+        // Velocidade
         comandos.add(new SpeedCommand());
-
         return comandos;
     }
 }

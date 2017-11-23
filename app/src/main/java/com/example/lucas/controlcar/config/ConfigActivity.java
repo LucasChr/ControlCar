@@ -1,7 +1,7 @@
 package com.example.lucas.controlcar.config;
 
 import android.app.Activity;
-import android.app.Notification;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -10,10 +10,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Message;
@@ -25,22 +28,20 @@ import com.example.lucas.controlcar.bluetooth.BuscarDispositivosActivity;
 import com.example.lucas.controlcar.bluetooth.ListaDispositivos;
 import com.example.lucas.controlcar.bluetooth.ListaPareadosActivity;
 import com.example.lucas.controlcar.bluetooth.ReceberMensagemActivity;
+import com.example.lucas.controlcar.obd.ComandosObd;
+import com.github.pires.obd.commands.ObdCommand;
 import com.github.pires.obd.commands.SpeedCommand;
-import com.github.pires.obd.commands.control.ModuleVoltageCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
 import com.github.pires.obd.commands.protocol.ObdResetCommand;
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
 import com.github.pires.obd.commands.protocol.TimeoutCommand;
-import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
-import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
 import com.github.pires.obd.enums.ObdProtocols;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -57,7 +58,7 @@ public class ConfigActivity extends AppCompatActivity {
 
     ConnectedThread connectedThread;
     ArrayAdapter adapter;
-    ListView lista;
+    TableLayout lista;
     Handler mHandler;
     StringBuilder dadosBluetooth = new StringBuilder();
 
@@ -78,7 +79,7 @@ public class ConfigActivity extends AppCompatActivity {
 
         btnConectar = (Button) findViewById(R.id.btnConectar);
         tvTeste = (TextView) findViewById(R.id.tvTeste);
-        lista = (ListView) findViewById(R.id.lista);
+        lista = (TableLayout) findViewById(R.id.lista);
 
         btfAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -196,8 +197,14 @@ public class ConfigActivity extends AppCompatActivity {
                                 speedCommand.run(btfSocket.getInputStream(), btfSocket.getOutputStream());
                                 Log.d("Passou 6", "RPM: " + engineRpmCommand.getFormattedResult());
                                 Log.d("Passou 7", "Speed: " + speedCommand.getFormattedResult());
-                                tvTeste.setText(engineRpmCommand.getFormattedResult());
-                                lista.addView(tvTeste);
+//                                tvTeste.setText(engineRpmCommand.getFormattedResult());
+//                                lista.addView(tvTeste);
+//                                novaTableRow(engineRpmCommand.getName(), engineRpmCommand.getFormattedResult());
+//                                novaTableRow(speedCommand.getName(), speedCommand.getFormattedResult());
+//                                buscaDados();
+                                for (ObdCommand command : ComandosObd.getComandos()) {
+                                    novaTableRow(command.getName(), command.getFormattedResult());
+                                }
                                 adapter.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
@@ -213,16 +220,42 @@ public class ConfigActivity extends AppCompatActivity {
         }
     }
 
-    private String getVoltagem(BluetoothSocket socket) throws IOException, InterruptedException {
-        ModuleVoltageCommand voltCommand = new ModuleVoltageCommand();
-        while (!Thread.currentThread().isInterrupted()) {
-            voltCommand.run(socket.getInputStream(), socket.getOutputStream());
-            return voltCommand.getFormattedResult();
-        }
-        return "";
+    private void novaTableRow(String comando, String resultado) {
+        TableRow tr = new TableRow(this);
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tr.setLayoutParams(params);
+
+        TextView name = new TextView(this);
+        name.setGravity(Gravity.RIGHT);
+        name.setText(comando + ": ");
+        TextView value = new TextView(this);
+        value.setGravity(Gravity.LEFT);
+        value.setText(resultado);
+        tr.addView(name);
+        tr.addView(value);
+        lista.addView(tr, params);
     }
 
-    public void teste(View v) throws IOException, InterruptedException {
+    public void buscaDados() {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Buscando dados da Ecu");
+        pd.show();
+
+        new Thread() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (ObdCommand command : ComandosObd.getComandos()) {
+                            novaTableRow(command.getName(), command.getFormattedResult());
+                        }
+                        pd.setMessage("Dados Coletados");
+                        pd.dismiss();
+                    }
+                });
+            }
+        }.start();
 
     }
 

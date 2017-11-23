@@ -94,10 +94,10 @@
             android:elevation="2dp"
             android:outlineProvider="bounds">
 
-            <ListView
+            <TableLayout
                 android:id="@+id/lista"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
         </ScrollView>
 
     </LinearLayout>

@@ -11,21 +11,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.lucas.controlcar.relatorio.RelatorioCadActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/relatorio_cad_btnConectar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Clique abaixo para parear seu dispositivo"
-        android:textAlignment="center"
-        android:textSize="22sp" />
+        android:onClick="Conectar"
+        android:text="Conectar" />
 
-    <ImageButton
-        android:id="@+id/btn_connect_bluetooth"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:background="#00000000"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_menu_manage" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Teste"
+        android:layout_below="@+id/textView1"
+        android:id="@+id/engine_speed" />
+
+    <ScrollView
+        android:id="@+id/relatorio_cad_data_scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:elevation="2dp"
+        android:outlineProvider="bounds">
+
+        <TableLayout
+            android:id="@+id/relatorio_cad_lista"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
 </LinearLayout>
