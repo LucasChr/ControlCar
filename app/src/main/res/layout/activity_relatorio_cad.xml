@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/vehicle_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,12 +18,18 @@
         android:onClick="Conectar"
         android:text="Conectar" />
 
+    <Button
+        android:id="@+id/relatorio_cad_btnAtualizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="Atualizar"
+        android:text="Atualizar" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Teste"
-        android:layout_below="@+id/textView1"
-        android:id="@+id/engine_speed" />
+        android:id="@+id/relatorio_cad_tvTeste"
+        android:text="Teste"/>
 
     <ScrollView
         android:id="@+id/relatorio_cad_data_scroll"

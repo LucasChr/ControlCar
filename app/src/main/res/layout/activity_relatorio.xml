@@ -1,33 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.lucas.controlcar.relatorio.RelatorioActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.lucas.controlcar.relatorio.RelatorioCadActivity">
+
+    <Button
+        android:id="@+id/relatorio_btnConectar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="Conectar"
+        android:text="Conectar" />
 
     <TextView
-        android:id="@+id/tvFlow"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="134dp"
-        tools:layout_editor_absoluteY="91dp" />
+        android:text="Teste"
+        android:layout_below="@+id/textView1"
+        android:id="@+id/activity_relatorio_obd_conexao" />
 
-    <TextView
-        android:id="@+id/tvRpm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="162dp"
-        tools:layout_editor_absoluteY="164dp" />
+    <ScrollView
+        android:id="@+id/relatorio_cad_data_scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:elevation="2dp"
+        android:outlineProvider="bounds">
 
-    <TextView
-        android:id="@+id/tvSpeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="162dp"
-        tools:layout_editor_absoluteY="245dp" />
+        <TableLayout
+            android:id="@+id/relatorio_lista"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
 </LinearLayout>

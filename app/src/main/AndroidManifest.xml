@@ -55,7 +55,7 @@
         </receiver>
 
         <service
-            android:name=".config.Servico"
+            android:name=".config.ServicoObd"
             android:exported="false">
             <intent-filter>
                 <action android:name="SERVICO_TESTE" />
@@ -63,7 +63,16 @@
             </intent-filter>
         </service>
 
-        <service android:name="com.openxc.VehicleManager"/>
+        <service
+            android:name=".config.ServicoIntent"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="SERVICO_INTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>
