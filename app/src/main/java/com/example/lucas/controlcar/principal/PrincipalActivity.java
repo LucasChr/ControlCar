@@ -10,36 +10,31 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lucas.controlcar.R;
-import com.example.lucas.controlcar.bluetooth.ListaDispositivos;
 import com.example.lucas.controlcar.carro.CarroCadActivity;
 import com.example.lucas.controlcar.carro.CarroDAO;
 import com.example.lucas.controlcar.carro.CarrosListFragment;
 import com.example.lucas.controlcar.config.ConfigActivity;
-import com.example.lucas.controlcar.relatorio.RelatorioActivity;
 import com.example.lucas.controlcar.relatorio.RelatorioCadActivity;
 import com.example.lucas.controlcar.usuario.UsuarioCadActivity;
 import com.example.lucas.controlcar.usuario.UsuarioListFragment;
-import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
-
-import java.io.IOException;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,10 +42,11 @@ public class PrincipalActivity extends AppCompatActivity
     private static final int SOLICITA_ATIVACAO = 1;
     private CarroDAO carroDAO;
     FloatingActionButton fab;
-
+    private TextView tvBt;
     private BluetoothAdapter btAdapter = null;
     private NotificationCompat.Builder mBuilder;
     private Notification notification;
+    private NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +55,7 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        tvBt = (TextView) findViewById(R.id.tvStatusBt);
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +81,7 @@ public class PrincipalActivity extends AppCompatActivity
 
         setDisplay(R.id.nav_carros);
 
-        NotificationManager mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         PendingIntent p = PendingIntent.getActivity(this, 0, new Intent(this, PrincipalActivity.class), 0);
 
         /*Notificacao ao abrir o app*/
@@ -97,22 +94,25 @@ public class PrincipalActivity extends AppCompatActivity
         mBuilder.setContentIntent(p);
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
-        String descs = new String("App");
+        String descs = new String("Recebendo dados...");
         style.addLine(descs);
         mBuilder.setStyle(style);
 
         notification = mBuilder.build();
         notification.flags = Notification.FLAG_LOCAL_ONLY;
-        mNotifyManager.notify(R.drawable.ic_menu_manage, notification);
+        notificationManager.notify(R.drawable.ic_menu_manage, notification);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (btAdapter == null) {
             Toast.makeText(getApplicationContext(), "O dispositivo não tem bluetooth, a aplicação será encerrada", Toast.LENGTH_LONG).show();
+            notificationManager.cancelAll();
             finishAffinity();
         } else if (!btAdapter.isEnabled()) {
             Intent it = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(it, SOLICITA_ATIVACAO);
+        } else {
+//            tvBt.setText(R.string.status_bt_conectado);
         }
 
     }
@@ -121,15 +121,16 @@ public class PrincipalActivity extends AppCompatActivity
     public void onBackPressed() {
         //Alerta para sair do aplicativo
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Fechar");
-        builder.setMessage("Deseja realmente parar o aplicativo?");
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.fechar);
+        builder.setMessage(R.string.perguntaFechar);
+        builder.setPositiveButton(R.string.sim, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
                 //Fecha a aplicação
+                notificationManager.cancelAll();
                 finishAffinity();
             }
         });
-        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.nao, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
             }
         });
@@ -200,7 +201,7 @@ public class PrincipalActivity extends AppCompatActivity
                 break;
             }
             case R.id.nav_relatorio: {
-                Intent it = new Intent(PrincipalActivity.this, RelatorioActivity.class);
+                Intent it = new Intent(PrincipalActivity.this, RelatorioCadActivity.class);
                 startActivityForResult(it, 3);
                 break;
             }

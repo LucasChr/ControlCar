@@ -45,7 +45,6 @@ public class CarroCadActivity extends AppCompatActivity {
         edtPlaca = (EditText) findViewById(R.id.carro_cad_etPlaca);
         edtAno = (EditText) findViewById(R.id.carro_cad_etAno);
         edtCor = (EditText) findViewById(R.id.carro_cad__etCor);
-        imgFoto = (ImageView) findViewById(R.id.carro_cad_imgCarro);
 
         carroDAO = new CarroDAO(this);
     }

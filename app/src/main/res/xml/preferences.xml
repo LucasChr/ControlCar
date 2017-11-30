@@ -5,13 +5,6 @@
 
     <PreferenceCategory android:title="@string/titulo_config_btf">
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:dialogTitle="@string/config_btf_titulo"
-            android:key="ativa_bluetooth_preference"
-            android:summaryOff="@string/config_btf_summaryOff"
-            android:title="@string/config_btf_titulo" />
-
         <ListPreference
             android:dialogTitle="@string/config_btf_list_dev_titulo"
             android:key="lista_dev_bluetooth_preference"

@@ -8,7 +8,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -50,7 +49,7 @@ public class ConexaoObd implements IObdConexao {
         enviaComandoObd("AT Z"); // reset
         enviaComandoObd("AT E0"); // echo off
         enviaComandoObd("AT L0"); // linefeed off
-        enviaComandoObd("AT ST 62"); // timeout in 4ms quants
+        enviaComandoObd("AT ST 62"); // tempo de resposta em milisegundos
         enviaComandoObd("AT SP 0"); // seleciona protocolo automatico
         enviaComandoObd("01 05"); // auto-descoberta
 

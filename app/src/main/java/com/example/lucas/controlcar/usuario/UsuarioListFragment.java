@@ -51,7 +51,7 @@ public class UsuarioListFragment extends Fragment implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Usuario usuario = usuarios.get(position);
 
-        Intent it = new Intent(getActivity(), UsuarioListFragment.class);
+        Intent it = new Intent(getActivity(), UsuarioActivity.class);
         String id1 = String.valueOf(usuario.getId());
         it.putExtra(Usuario.ID, id1);
         startActivityForResult(it, 1);

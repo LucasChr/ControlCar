@@ -29,7 +29,6 @@ import com.example.lucas.controlcar.config.ServicoObd;
 import com.example.lucas.controlcar.config.ServicoObdConexao;
 import com.example.lucas.controlcar.obd.ComandosObd;
 import com.github.pires.obd.commands.ObdCommand;
-import com.google.inject.Inject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,11 +57,9 @@ public class RelatorioActivity extends AppCompatActivity {
     private ServicoObdConexao serviceConn = null;
     private AtualizaThread atualiza = null;
 
-    @Inject
     private PowerManager powerManager;
 
     private PowerManager.WakeLock wakeLock = null;
-    @Inject
     private SharedPreferences pref = null;
 
     @Override

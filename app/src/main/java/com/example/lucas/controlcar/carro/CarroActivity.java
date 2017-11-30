@@ -2,17 +2,12 @@ package com.example.lucas.controlcar.carro;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Base64;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.lucas.controlcar.R;
 
@@ -29,15 +24,6 @@ public class CarroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carro);
 
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setHomeButtonEnabled(true);
-//        } else {
-//            getActionBar().setDisplayHomeAsUpEnabled(true);
-//            getActionBar().setHomeButtonEnabled(true);
-//        }
-
         carroDAO = new CarroDAO(this);
         Intent it = getIntent();
 
@@ -52,11 +38,6 @@ public class CarroActivity extends AppCompatActivity {
         etPlaca = (EditText) findViewById(R.id.activity_carro_etPlaca);
         etAno = (EditText) findViewById(R.id.activity_carro_etAno);
         etCor = (EditText) findViewById(R.id.activity_carro_etCor);
-        imgCarro = (ImageView) findViewById(R.id.activity_carro_imgCarro);
-
-        byte[] bytearray = Base64.decode(carro.getFoto(), Base64.DEFAULT);
-        ivFoto = BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
-        imgCarro.setImageBitmap(ivFoto);
 
         etNome.setText(carro.getNome());
         etMontadora.setText(carro.getMontadora());

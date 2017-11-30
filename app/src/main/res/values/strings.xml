@@ -21,11 +21,12 @@
     <string name="obd_desconectado"> Desconectado</string>
     <string name="gps_ativado">GPS: Ativado</string>
     <string name="gps_desativado">GPS: Desativado</string>
-    <string name="status_btf_conectando">Bluetooth conectando..</string>
-    <string name="status_btf_conectado">Bluetooth conectado</string>
-    <string name="status_btf_desabilitado">Bluetooth desconectado</string>
-    <string name="status_btf_erro_conexao">Bluetooth Erro!</string>
-    <string name="status_btf">Status BTF</string>
+    <string name="status_bt_conectando">Bluetooth conectando..</string>
+    <string name="status_bt_conectado">Bluetooth conectado</string>
+    <string name="status_bt_desabilitado">Bluetooth desconectado</string>
+    <string name="status_bt_erro_conexao">Bluetooth Erro!</string>
+    <string name="status_bt">Status Bluetooth: </string>
+
     <!--TESTES-->
     <string name="text_bluetooth_semdevice">Sem dispositivo bluetooth selecionado</string>
     <string name="notification_action">Clique para iniciar o leitor OBD</string>
@@ -96,4 +97,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="nao">Não</string>
+    <string name="sim">Sim</string>
+    <string name="fechar">Fechar</string>
+    <string name="perguntaFechar">Deseja realmente parar o aplicativo?</string>
 </resources>

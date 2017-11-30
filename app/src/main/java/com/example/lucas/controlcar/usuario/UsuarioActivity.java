@@ -24,9 +24,7 @@ public class UsuarioActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carro);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_usuario);
 
         usuarioDAO = new UsuarioDAO(this);
         Intent it = getIntent();
@@ -40,7 +38,6 @@ public class UsuarioActivity extends AppCompatActivity {
         edtNome = (EditText) findViewById(R.id.activity_carro_etMontadora);
         edtEmail = (EditText) findViewById(R.id.activity_carro_etModelo);
         edtTelefone = (EditText) findViewById(R.id.activity_carro_etPlaca);
-        imgUsuario = (ImageView) findViewById(R.id.activity_carro_imgCarro);
 
         byte[] bytearray = Base64.decode(usuario.getFoto(), Base64.DEFAULT);
         ivFoto = BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);

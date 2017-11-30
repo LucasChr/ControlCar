@@ -25,14 +25,39 @@ import com.example.lucas.controlcar.bluetooth.ListaDispositivos;
 import com.example.lucas.controlcar.config.ServicoObd;
 import com.example.lucas.controlcar.obd.ConexaoObd;
 import com.github.pires.obd.commands.ObdCommand;
+import com.github.pires.obd.commands.SpeedCommand;
+import com.github.pires.obd.commands.control.DistanceMILOnCommand;
+import com.github.pires.obd.commands.control.DtcNumberCommand;
+import com.github.pires.obd.commands.control.EquivalentRatioCommand;
 import com.github.pires.obd.commands.control.ModuleVoltageCommand;
+import com.github.pires.obd.commands.control.TimingAdvanceCommand;
+import com.github.pires.obd.commands.control.TroubleCodesCommand;
+import com.github.pires.obd.commands.control.VinCommand;
+import com.github.pires.obd.commands.engine.LoadCommand;
+import com.github.pires.obd.commands.engine.MassAirFlowCommand;
+import com.github.pires.obd.commands.engine.OilTempCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
+import com.github.pires.obd.commands.engine.RuntimeCommand;
+import com.github.pires.obd.commands.engine.ThrottlePositionCommand;
+import com.github.pires.obd.commands.fuel.AirFuelRatioCommand;
+import com.github.pires.obd.commands.fuel.ConsumptionRateCommand;
+import com.github.pires.obd.commands.fuel.FindFuelTypeCommand;
+import com.github.pires.obd.commands.fuel.FuelLevelCommand;
+import com.github.pires.obd.commands.fuel.WidebandAirFuelRatioCommand;
+import com.github.pires.obd.commands.pressure.BarometricPressureCommand;
+import com.github.pires.obd.commands.pressure.FuelPressureCommand;
+import com.github.pires.obd.commands.pressure.FuelRailPressureCommand;
+import com.github.pires.obd.commands.pressure.IntakeManifoldPressureCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
 import com.github.pires.obd.commands.protocol.ObdResetCommand;
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
 import com.github.pires.obd.commands.protocol.TimeoutCommand;
+import com.github.pires.obd.commands.temperature.AirIntakeTemperatureCommand;
+import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
+import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
 import com.github.pires.obd.enums.ObdProtocols;
+import com.github.pires.obd.exceptions.NoDataException;
 import com.github.pires.obd.exceptions.UnableToConnectException;
 
 import java.io.IOException;
@@ -93,6 +118,35 @@ public class RelatorioCadActivity extends AppCompatActivity {
 
     private ServicoObd servico;
 
+    ModuleVoltageCommand moduleVoltageCommand;
+    EquivalentRatioCommand equivalentRatioCommand;
+    DistanceMILOnCommand distanceMILOnCommand;
+    DtcNumberCommand dtcNumberCommand;
+    TimingAdvanceCommand timingAdvanceCommand;
+    TroubleCodesCommand troubleCodesCommand;
+    VinCommand vinCommand;
+    LoadCommand loadCommand;
+    RuntimeCommand runtimeCommand;
+    MassAirFlowCommand massAirFlowCommand;
+    ThrottlePositionCommand throttlePositionCommand;
+    FindFuelTypeCommand findFuelTypeCommand;
+    ConsumptionRateCommand consumptionRateCommand;
+    FuelLevelCommand fuelLevelCommand;
+    AirFuelRatioCommand airFuelRatioCommand;
+    WidebandAirFuelRatioCommand widebandAirFuelRatioCommand;
+    OilTempCommand oilTempCommand;
+    BarometricPressureCommand barometricPressureCommand;
+    FuelPressureCommand fuelPressureCommand;
+    FuelRailPressureCommand fuelRailPressureCommand;
+    IntakeManifoldPressureCommand intakeManifoldPressureCommand;
+    AirIntakeTemperatureCommand airIntakeTemperatureCommand;
+    AmbientAirTemperatureCommand ambientAirTemperatureCommand;
+    EngineCoolantTemperatureCommand engineCoolantTemperatureCommand;
+    SpeedCommand speedCommand;
+    RPMCommand rpmCommand;
+    ObdCommand command;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +154,7 @@ public class RelatorioCadActivity extends AppCompatActivity {
 
         btnConectar = (Button) findViewById(R.id.relatorio_cad_btnConectar);
         lista = (TableLayout) findViewById(R.id.relatorio_cad_lista);
-        teste = (TextView) findViewById(R.id.relatorio_cad_tvTeste);
+        teste = (TextView) findViewById(R.id.relatorio_cad_tvOBD);
 //        vv = (LinearLayout) findViewById(R.id.vehicle_view);
 
         handlerDados = new Handler();
@@ -130,6 +184,7 @@ public class RelatorioCadActivity extends AppCompatActivity {
                         btnConectar.setText("Desconectar");
                         Toast.makeText(getApplicationContext(), "Conecado com: " + MAC, Toast.LENGTH_LONG).show();
                         Log.d("Passou", MAC);
+                        teste.setText(R.string.obd_conectado);
                         preparaConexao();
                     } catch (IOException e) {
                         conexao = false;
@@ -170,13 +225,10 @@ public class RelatorioCadActivity extends AppCompatActivity {
         }
     }
 
-    ModuleVoltageCommand moduleVoltageCommand;
-    RPMCommand rpmCommand;
-    ObdCommand command;
-
     private void preparaConexao() {
         try {
-            new ObdResetCommand().run(btSocket.getInputStream(), btSocket.getOutputStream());
+            final ObdResetCommand obdResetCommand = new ObdResetCommand();
+            obdResetCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
             Log.d("OBD", "OBDRESETCOMMAND");
             new EchoOffCommand().run(btSocket.getInputStream(), btSocket.getOutputStream());
             Log.d("OBD", "ECHOOFFCOMMAND");
@@ -194,8 +246,57 @@ public class RelatorioCadActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
+                        moduleVoltageCommand = new ModuleVoltageCommand();
+                        equivalentRatioCommand = new EquivalentRatioCommand();
+                        distanceMILOnCommand = new DistanceMILOnCommand();
+                        dtcNumberCommand = new DtcNumberCommand();
+                        timingAdvanceCommand = new TimingAdvanceCommand();
+                        troubleCodesCommand = new TroubleCodesCommand();
+                        vinCommand = new VinCommand();
+                        loadCommand = new LoadCommand();
+                        runtimeCommand = new RuntimeCommand();
+                        massAirFlowCommand = new MassAirFlowCommand();
+                        throttlePositionCommand = new ThrottlePositionCommand();
+                        findFuelTypeCommand = new FindFuelTypeCommand();
+                        consumptionRateCommand = new ConsumptionRateCommand();
+                        fuelLevelCommand = new FuelLevelCommand();
+                        airFuelRatioCommand = new AirFuelRatioCommand();
+                        widebandAirFuelRatioCommand = new WidebandAirFuelRatioCommand();
+                        oilTempCommand = new OilTempCommand();
+                        barometricPressureCommand = new BarometricPressureCommand();
+                        fuelPressureCommand = new FuelPressureCommand();
+                        fuelRailPressureCommand = new FuelRailPressureCommand();
+                        intakeManifoldPressureCommand = new IntakeManifoldPressureCommand();
+                        airIntakeTemperatureCommand = new AirIntakeTemperatureCommand();
+                        ambientAirTemperatureCommand = new AmbientAirTemperatureCommand();
+                        engineCoolantTemperatureCommand = new EngineCoolantTemperatureCommand();
+                        speedCommand = new SpeedCommand();
+
                         rpmCommand = new RPMCommand();
                         rpmCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        moduleVoltageCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        equivalentRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        distanceMILOnCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        dtcNumberCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        timingAdvanceCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        troubleCodesCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        vinCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        loadCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        runtimeCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        massAirFlowCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        throttlePositionCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        fuelLevelCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        airFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        widebandAirFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        oilTempCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        barometricPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        fuelPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        fuelRailPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        intakeManifoldPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        airIntakeTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        ambientAirTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        engineCoolantTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        speedCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
 //                        for (ObdCommand cmd : ComandosObd.getComandos()) {
 //                            command = cmd;
 //                            command.run(btSocket.getInputStream(), btSocket.getOutputStream());
@@ -207,6 +308,9 @@ public class RelatorioCadActivity extends AppCompatActivity {
                     } catch (UnableToConnectException e) {
                         e.printStackTrace();
                         Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
                     }
 //                    try {
 //                        sleep(100);
@@ -217,9 +321,31 @@ public class RelatorioCadActivity extends AppCompatActivity {
                     handlerDados.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-//                            novaTableRow("Voltagem da Bateria", moduleVoltageCommand.getFormattedResult());
-//                            novaTableRow("Voltagem da Bateria", moduleVoltageCommand.getFormattedResult());
+                            novaTableRow(obdResetCommand.getName(), obdResetCommand.getFormattedResult());
                             novaTableRow(rpmCommand.getName(), rpmCommand.getFormattedResult());
+                            novaTableRow(moduleVoltageCommand.getName(), moduleVoltageCommand.getFormattedResult());
+                            novaTableRow(equivalentRatioCommand.getName(), equivalentRatioCommand.getFormattedResult());
+                            novaTableRow(distanceMILOnCommand.getName(), distanceMILOnCommand.getFormattedResult());
+                            novaTableRow(dtcNumberCommand.getName(), dtcNumberCommand.getFormattedResult());
+                            novaTableRow(timingAdvanceCommand.getName(), timingAdvanceCommand.getFormattedResult());
+                            novaTableRow(troubleCodesCommand.getName(), troubleCodesCommand.getFormattedResult());
+                            novaTableRow(vinCommand.getName(), vinCommand.getFormattedResult());
+                            novaTableRow(loadCommand.getName(), loadCommand.getFormattedResult());
+                            novaTableRow(runtimeCommand.getName(), runtimeCommand.getFormattedResult());
+                            novaTableRow(massAirFlowCommand.getName(), massAirFlowCommand.getFormattedResult());
+                            novaTableRow(throttlePositionCommand.getName(), throttlePositionCommand.getFormattedResult());
+                            novaTableRow(fuelLevelCommand.getName(), fuelLevelCommand.getFormattedResult());
+                            novaTableRow(airFuelRatioCommand.getName(), airFuelRatioCommand.getFormattedResult());
+                            novaTableRow(widebandAirFuelRatioCommand.getName(), widebandAirFuelRatioCommand.getFormattedResult());
+                            novaTableRow(oilTempCommand.getName(), oilTempCommand.getFormattedResult());
+                            novaTableRow(barometricPressureCommand.getName(), barometricPressureCommand.getFormattedResult());
+                            novaTableRow(fuelPressureCommand.getName(), fuelPressureCommand.getFormattedResult());
+                            novaTableRow(fuelRailPressureCommand.getName(), fuelRailPressureCommand.getFormattedResult());
+                            novaTableRow(intakeManifoldPressureCommand.getName(), intakeManifoldPressureCommand.getFormattedResult());
+                            novaTableRow(airIntakeTemperatureCommand.getName(), airIntakeTemperatureCommand.getFormattedResult());
+                            novaTableRow(ambientAirTemperatureCommand.getName(), ambientAirTemperatureCommand.getFormattedResult());
+                            novaTableRow(engineCoolantTemperatureCommand.getName(), engineCoolantTemperatureCommand.getFormattedResult());
+                            novaTableRow(speedCommand.getName(), speedCommand.getFormattedResult());
                         }
                     }, 1000);
                 }
@@ -332,8 +458,59 @@ public class RelatorioCadActivity extends AppCompatActivity {
             public void run() {
                 try {
                     try {
+
+                        moduleVoltageCommand = new ModuleVoltageCommand();
+                        equivalentRatioCommand = new EquivalentRatioCommand();
+                        distanceMILOnCommand = new DistanceMILOnCommand();
+                        dtcNumberCommand = new DtcNumberCommand();
+                        timingAdvanceCommand = new TimingAdvanceCommand();
+                        troubleCodesCommand = new TroubleCodesCommand();
+                        vinCommand = new VinCommand();
+                        loadCommand = new LoadCommand();
+                        runtimeCommand = new RuntimeCommand();
+                        massAirFlowCommand = new MassAirFlowCommand();
+                        throttlePositionCommand = new ThrottlePositionCommand();
+                        findFuelTypeCommand = new FindFuelTypeCommand();
+                        consumptionRateCommand = new ConsumptionRateCommand();
+                        fuelLevelCommand = new FuelLevelCommand();
+                        airFuelRatioCommand = new AirFuelRatioCommand();
+                        widebandAirFuelRatioCommand = new WidebandAirFuelRatioCommand();
+                        oilTempCommand = new OilTempCommand();
+                        barometricPressureCommand = new BarometricPressureCommand();
+                        fuelPressureCommand = new FuelPressureCommand();
+                        fuelRailPressureCommand = new FuelRailPressureCommand();
+                        intakeManifoldPressureCommand = new IntakeManifoldPressureCommand();
+                        airIntakeTemperatureCommand = new AirIntakeTemperatureCommand();
+                        ambientAirTemperatureCommand = new AmbientAirTemperatureCommand();
+                        engineCoolantTemperatureCommand = new EngineCoolantTemperatureCommand();
+                        speedCommand = new SpeedCommand();
+
                         rpmCommand = new RPMCommand();
                         rpmCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        moduleVoltageCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        equivalentRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        distanceMILOnCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        dtcNumberCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        timingAdvanceCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        troubleCodesCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        vinCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        loadCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        runtimeCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        massAirFlowCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        throttlePositionCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        fuelLevelCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        airFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        widebandAirFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        oilTempCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        barometricPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        fuelPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        fuelRailPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        intakeManifoldPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        airIntakeTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        ambientAirTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        engineCoolantTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                        speedCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+
 //                        for (ObdCommand cmd : ComandosObd.getComandos()) {
 //                            command = cmd;
 //                            command.run(btSocket.getInputStream(), btSocket.getOutputStream());
@@ -345,6 +522,10 @@ public class RelatorioCadActivity extends AppCompatActivity {
                     } catch (UnableToConnectException e) {
                         e.printStackTrace();
                         Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem dados");
+                        novaTableRow(moduleVoltageCommand.getName(), "Sem dados");
                     }
 //                    try {
 //                        sleep(100);
@@ -357,7 +538,31 @@ public class RelatorioCadActivity extends AppCompatActivity {
                         public void run() {
 //                            novaTableRow("Voltagem da Bateria", moduleVoltageCommand.getFormattedResult());
 //                            novaTableRow("Voltagem da Bateria", moduleVoltageCommand.getFormattedResult());
+//                            novaTableRow(obdResetCommand.getName(), obdResetCommand.getFormattedResult());
                             novaTableRow(rpmCommand.getName(), rpmCommand.getFormattedResult());
+                            novaTableRow(moduleVoltageCommand.getName(), moduleVoltageCommand.getFormattedResult());
+                            novaTableRow(equivalentRatioCommand.getName(), equivalentRatioCommand.getFormattedResult());
+                            novaTableRow(distanceMILOnCommand.getName(), distanceMILOnCommand.getFormattedResult());
+                            novaTableRow(dtcNumberCommand.getName(), dtcNumberCommand.getFormattedResult());
+                            novaTableRow(timingAdvanceCommand.getName(), timingAdvanceCommand.getFormattedResult());
+                            novaTableRow(troubleCodesCommand.getName(), troubleCodesCommand.getFormattedResult());
+                            novaTableRow(vinCommand.getName(), vinCommand.getFormattedResult());
+                            novaTableRow(loadCommand.getName(), loadCommand.getFormattedResult());
+                            novaTableRow(runtimeCommand.getName(), runtimeCommand.getFormattedResult());
+                            novaTableRow(massAirFlowCommand.getName(), massAirFlowCommand.getFormattedResult());
+                            novaTableRow(throttlePositionCommand.getName(), throttlePositionCommand.getFormattedResult());
+                            novaTableRow(fuelLevelCommand.getName(), fuelLevelCommand.getFormattedResult());
+                            novaTableRow(airFuelRatioCommand.getName(), airFuelRatioCommand.getFormattedResult());
+                            novaTableRow(widebandAirFuelRatioCommand.getName(), widebandAirFuelRatioCommand.getFormattedResult());
+                            novaTableRow(oilTempCommand.getName(), oilTempCommand.getFormattedResult());
+                            novaTableRow(barometricPressureCommand.getName(), barometricPressureCommand.getFormattedResult());
+                            novaTableRow(fuelPressureCommand.getName(), fuelPressureCommand.getFormattedResult());
+                            novaTableRow(fuelRailPressureCommand.getName(), fuelRailPressureCommand.getFormattedResult());
+                            novaTableRow(intakeManifoldPressureCommand.getName(), intakeManifoldPressureCommand.getFormattedResult());
+                            novaTableRow(airIntakeTemperatureCommand.getName(), airIntakeTemperatureCommand.getFormattedResult());
+                            novaTableRow(ambientAirTemperatureCommand.getName(), ambientAirTemperatureCommand.getFormattedResult());
+                            novaTableRow(engineCoolantTemperatureCommand.getName(), engineCoolantTemperatureCommand.getFormattedResult());
+                            novaTableRow(speedCommand.getName(), speedCommand.getFormattedResult());
                         }
                     }, 1000);
                 } catch (Exception e) {

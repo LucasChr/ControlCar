@@ -32,11 +32,11 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <TextView
-            android:id="@+id/tv1"
+            android:id="@+id/tvStatusBt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="@string/status_btf" />
+            android:text="@string/status_bt" />
 
     </LinearLayout>
 
