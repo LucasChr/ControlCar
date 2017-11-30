@@ -246,61 +246,107 @@ public class RelatorioCadActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        moduleVoltageCommand = new ModuleVoltageCommand();
-                        equivalentRatioCommand = new EquivalentRatioCommand();
-                        distanceMILOnCommand = new DistanceMILOnCommand();
-                        dtcNumberCommand = new DtcNumberCommand();
-                        timingAdvanceCommand = new TimingAdvanceCommand();
-                        troubleCodesCommand = new TroubleCodesCommand();
-                        vinCommand = new VinCommand();
-                        loadCommand = new LoadCommand();
-                        runtimeCommand = new RuntimeCommand();
-                        massAirFlowCommand = new MassAirFlowCommand();
-                        throttlePositionCommand = new ThrottlePositionCommand();
-                        findFuelTypeCommand = new FindFuelTypeCommand();
-                        consumptionRateCommand = new ConsumptionRateCommand();
-                        fuelLevelCommand = new FuelLevelCommand();
-                        airFuelRatioCommand = new AirFuelRatioCommand();
-                        widebandAirFuelRatioCommand = new WidebandAirFuelRatioCommand();
-                        oilTempCommand = new OilTempCommand();
-                        barometricPressureCommand = new BarometricPressureCommand();
-                        fuelPressureCommand = new FuelPressureCommand();
-                        fuelRailPressureCommand = new FuelRailPressureCommand();
-                        intakeManifoldPressureCommand = new IntakeManifoldPressureCommand();
-                        airIntakeTemperatureCommand = new AirIntakeTemperatureCommand();
-                        ambientAirTemperatureCommand = new AmbientAirTemperatureCommand();
-                        engineCoolantTemperatureCommand = new EngineCoolantTemperatureCommand();
-                        speedCommand = new SpeedCommand();
-
                         rpmCommand = new RPMCommand();
                         rpmCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        moduleVoltageCommand = new ModuleVoltageCommand();
                         moduleVoltageCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        equivalentRatioCommand = new EquivalentRatioCommand();
                         equivalentRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        distanceMILOnCommand = new DistanceMILOnCommand();
                         distanceMILOnCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        dtcNumberCommand = new DtcNumberCommand();
                         dtcNumberCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        timingAdvanceCommand = new TimingAdvanceCommand();
                         timingAdvanceCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+
+                    try {
+                        troubleCodesCommand = new TroubleCodesCommand();
                         troubleCodesCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        vinCommand = new VinCommand();
                         vinCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        loadCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        runtimeCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        massAirFlowCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        throttlePositionCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        fuelLevelCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        airFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        widebandAirFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        oilTempCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        barometricPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        fuelPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        fuelRailPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        intakeManifoldPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        airIntakeTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        ambientAirTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        engineCoolantTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-                        speedCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
-//                        for (ObdCommand cmd : ComandosObd.getComandos()) {
-//                            command = cmd;
-//                            command.run(btSocket.getInputStream(), btSocket.getOutputStream());
-//                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -313,10 +359,265 @@ public class RelatorioCadActivity extends AppCompatActivity {
                         Log.e("Dado", "Sem Dados");
                     }
 //                    try {
-//                        sleep(100);
-//                    } catch (InterruptedException ie) {
+//                        loadCommand = new LoadCommand();
+//                        loadCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    } catch (UnableToConnectException e) {
+//                        e.printStackTrace();
+//                        Log.e("Dado", "Unable" + e.getMessage());
+//                    } catch (NoDataException e) {
+//                        e.printStackTrace();
+//                        Log.e("Dado", "Sem Dados");
+//                    } catch (BusInitException b) {
+//                        b.printStackTrace();
+//                    } catch (UnsupportedCommandException m) {
+//                        m.printStackTrace();
+//                    } catch (NonNumericResponseException n) {
+//                        n.printStackTrace();
+//                    } catch (UnknownErrorException u) {
+//                        u.printStackTrace();
 //                    }
-
+                    try {
+                        runtimeCommand = new RuntimeCommand();
+                        runtimeCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        massAirFlowCommand = new MassAirFlowCommand();
+                        massAirFlowCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        throttlePositionCommand = new ThrottlePositionCommand();
+                        throttlePositionCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        fuelLevelCommand = new FuelLevelCommand();
+                        fuelLevelCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        airFuelRatioCommand = new AirFuelRatioCommand();
+                        airFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        widebandAirFuelRatioCommand = new WidebandAirFuelRatioCommand();
+                        widebandAirFuelRatioCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        oilTempCommand = new OilTempCommand();
+                        oilTempCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        barometricPressureCommand = new BarometricPressureCommand();
+                        barometricPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        fuelPressureCommand = new FuelPressureCommand();
+                        fuelPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        fuelRailPressureCommand = new FuelRailPressureCommand();
+                        fuelRailPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        intakeManifoldPressureCommand = new IntakeManifoldPressureCommand();
+                        intakeManifoldPressureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        airIntakeTemperatureCommand = new AirIntakeTemperatureCommand();
+                        airIntakeTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        ambientAirTemperatureCommand = new AmbientAirTemperatureCommand();
+                        ambientAirTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        engineCoolantTemperatureCommand = new EngineCoolantTemperatureCommand();
+                        engineCoolantTemperatureCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        speedCommand = new SpeedCommand();
+                        speedCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        consumptionRateCommand = new ConsumptionRateCommand();
+                        consumptionRateCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
+                    try {
+                        findFuelTypeCommand = new FindFuelTypeCommand();
+                        findFuelTypeCommand.run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (UnableToConnectException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Unable" + e.getMessage());
+                    } catch (NoDataException e) {
+                        e.printStackTrace();
+                        Log.e("Dado", "Sem Dados");
+                    }
 
                     handlerDados.postDelayed(new Runnable() {
                         @Override
@@ -330,7 +631,7 @@ public class RelatorioCadActivity extends AppCompatActivity {
                             novaTableRow(timingAdvanceCommand.getName(), timingAdvanceCommand.getFormattedResult());
                             novaTableRow(troubleCodesCommand.getName(), troubleCodesCommand.getFormattedResult());
                             novaTableRow(vinCommand.getName(), vinCommand.getFormattedResult());
-                            novaTableRow(loadCommand.getName(), loadCommand.getFormattedResult());
+//                            novaTableRow(loadCommand.getName(), loadCommand.getFormattedResult());
                             novaTableRow(runtimeCommand.getName(), runtimeCommand.getFormattedResult());
                             novaTableRow(massAirFlowCommand.getName(), massAirFlowCommand.getFormattedResult());
                             novaTableRow(throttlePositionCommand.getName(), throttlePositionCommand.getFormattedResult());
@@ -422,7 +723,9 @@ public class RelatorioCadActivity extends AppCompatActivity {
 //                m.run(btSocket.getInputStream(), btSocket.getOutputStream());
 //                teste.setText(m.getFormattedResult());
             Log.d("Passou dados", "comandos");
-            Toast.makeText(servico, "Dados Atualizados", Toast.LENGTH_SHORT).show();
+            Toast.makeText(servico, "Dados Atualizados", Toast.LENGTH_SHORT).
+
+                    show();
             adapter.notifyDataSetChanged();
 
 
